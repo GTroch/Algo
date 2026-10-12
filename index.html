@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algorithmen mit Snap!</title>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--ink:#1d2433;--muted:#5b6475;--line:#e1e5ee;--accent:#3a5bd9;
+--motion:#4a6cd4;--looks:#8f56e3;--pen:#0e9a6c;--control:#dda21a;--sensing:#0494dc;--variables:#f3761d;--lists:#d94d11;--custom:#7a7a8c;--operators:#5cb712}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--accent)}
+code,.mono{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:.92em;background:#eef0f6;padding:1px 5px;border-radius:4px}
+header.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(20,30,60,.05)}
+.topin{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f3761d,#dda21a);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px}
+.brand b{display:block;font-size:17px;line-height:1.1}.brand small{color:var(--muted);font-size:12px}
+nav#nav{display:flex;gap:4px;flex-wrap:wrap}
+nav#nav button{border:0;background:transparent;padding:7px 11px;border-radius:8px;font:600 14px system-ui,sans-serif;color:var(--muted);cursor:pointer}
+nav#nav button:hover{background:#f0f2f8;color:var(--ink)}
+nav#nav button.on{background:var(--ink);color:#fff}
+nav#nav button .ok{color:#2fa24f;margin-left:3px}
+nav#nav button.on .ok{color:#8ff0a4}
+.progress{height:4px;background:#eceff5}.progress div{height:100%;width:0;background:linear-gradient(90deg,#2fa24f,#7bd389);transition:width .4s}
+main{max-width:1240px;margin:0 auto;padding:22px 16px 70px}
+section.chap{display:none;animation:fade .25s}section.chap.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.chap>h1{font-size:30px;margin:6px 0 4px}
+.lead{font-size:18px;color:var(--muted);margin-top:0;max-width:820px}
+h2{font-size:22px;margin:38px 0 8px;padding-top:6px;border-top:1px solid var(--line)}
+h3{font-size:18px;margin:24px 0 6px}
+.prose{max-width:860px}
+.box{border-radius:10px;padding:12px 16px;margin:16px 0;border:1px solid;border-left-width:6px;max-width:960px}
+.box>h4{margin:0 0 4px;font-size:15px;display:flex;align-items:center;gap:6px}
+.box>*:last-child{margin-bottom:0}
+.box p{margin:6px 0}
+.merk{background:#fff7d1;border-color:#f0c000}
+.aufgabe{background:#fdeeee;border-color:#e04848}
+.tipp{background:#e9f2ff;border-color:#3b82f6}
+.vork{background:#f2f2f6;border-color:#8a8fa3}
+.idee{background:#eaf8ee;border-color:#2fa24f}
+.quiz{background:#fff;border-color:#c9cfdb}
+.gesell{background:#f4edfc;border-color:#8b5cf6}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;max-width:960px}
+.legend .box{margin:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,30,60,.08)}
+.card b{display:block;font-size:16px}.card span{color:var(--muted);font-size:14px}
+.card .num{font:800 13px system-ui;color:#fff;background:var(--ink);border-radius:20px;padding:1px 9px;display:inline-block;margin-bottom:6px}
+table.t{border-collapse:collapse;margin:10px 0;background:#fff;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:#f0f2f8}
+.btn{border:1px solid #c9cfdb;background:#fff;border-radius:8px;padding:6px 12px;font:600 14px system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.btn:hover{background:#f3f5fa}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+details.sol{margin:10px 0;border:1px dashed #c9cfdb;border-radius:10px;background:#fff;padding:6px 12px;max-width:960px}
+details.sol>summary{cursor:pointer;font-weight:700;color:#b33}
+details.sol[open]>summary{margin-bottom:8px}
+.solrow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.blocks{display:inline-block;padding:10px 12px;background:#eef0f5;border-radius:8px;margin:6px 0;max-width:100%;overflow-x:auto;vertical-align:middle}
+.blocks.inline{padding:4px 8px;margin:2px 0}
+.chapfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:44px;padding-top:16px;border-top:1px solid var(--line)}
+.donebtn.is{background:#2fa24f;border-color:#2fa24f;color:#fff}
+footer{max-width:1240px;margin:0 auto;padding:20px 16px 40px;color:var(--muted);font-size:13px}
+
+/* ---------- Blöcke ---------- */
+.blk{--c:#888;width:max-content;max-width:100%;margin:2px 0;font:600 13px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff}
+.c-motion{--c:var(--motion)}.c-looks{--c:var(--looks)}.c-pen{--c:var(--pen)}.c-control{--c:var(--control)}.c-sensing{--c:var(--sensing)}.c-variables{--c:var(--variables)}.c-lists{--c:var(--lists)}.c-custom{--c:var(--custom)}.c-operators{--c:var(--operators)}
+.blk>.row{display:flex;flex-wrap:wrap;align-items:center;gap:5px;background:var(--c);padding:6px 8px;border-radius:5px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.16);min-height:30px}
+.blk.cb>.row:first-child{border-radius:5px 5px 5px 0}
+.blk>.row.mid{border-radius:0 5px 5px 0;min-height:24px;padding:3px 8px}
+.blk>.mouth{border-left:14px solid var(--c);padding:3px 0 3px 4px;min-height:28px;min-width:130px}
+.blk>.foot{background:var(--c);height:13px;width:100px;border-radius:0 0 5px 5px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.16)}
+.blk>.row.hat{border-radius:16px 16px 5px 0;padding-top:10px}
+.blk.mainscript>.row.hat{border-radius:16px 16px 5px 5px}
+.flag{color:#2ecc40;font-size:15px;text-shadow:0 0 1px #0a0}
+.lbl{white-space:nowrap}
+.slot{font:500 13px/1.2 ui-monospace,Consolas,"Courier New",monospace;background:#fff;color:#1d2433;border:0;border-radius:10px;padding:3px 7px;min-width:3ch;outline:none;display:inline-block}
+input.slot:focus,select.slot:focus{box-shadow:0 0 0 2px #1d2433}
+.slot.cond{border-radius:3px;background:#efffe2;color:#235c00}
+.slot.var{background:#fff0e3;color:#8a3b00;border-radius:4px}
+select.slot{border-radius:4px;padding:2px 3px;font-size:12px}
+.ctl{display:inline-flex;gap:2px;margin-left:6px;opacity:.5}
+.row:hover>.ctl,.row:focus-within>.ctl{opacity:1}
+.ctl button{background:rgba(255,255,255,.26);border:0;color:#fff;border-radius:4px;width:20px;height:20px;font-size:11px;cursor:pointer;padding:0;line-height:20px}
+.ctl button:hover{background:rgba(255,255,255,.5)}
+.stack{min-height:44px;padding:4px 0 6px;min-width:160px}
+.ph{font:italic 500 12px system-ui,sans-serif;color:#7c8193;padding:6px 6px;cursor:pointer}
+.target{outline:2px dashed #e09a00;outline-offset:1px;background:rgba(255,205,0,.16)}
+.row.running{box-shadow:0 0 0 3px #fff36b,0 0 16px 3px #ffd400}
+.row.err{box-shadow:0 0 0 3px #ff3b3b,0 0 12px 2px #ff3b3b}
+.procdef{margin-bottom:22px}
+.pname{font-size:14px;background:rgba(0,0,0,.18);padding:2px 8px;border-radius:10px}
+.pdel{background:rgba(255,255,255,.25);border:0;color:#fff;border-radius:4px;cursor:pointer;margin-left:6px}
+
+/* ---------- Baukasten ---------- */
+.ws{display:grid;grid-template-columns:230px minmax(0,1fr) minmax(300px,460px);border:1px solid #d5dae5;border-radius:14px;background:#fff;overflow:hidden;margin:18px 0;box-shadow:0 6px 24px rgba(20,30,60,.07)}
+.ws-title{grid-column:1/-1;background:#1d2433;color:#fff;padding:8px 14px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ws-title small{font-weight:400;opacity:.75}
+.ws-pal{background:#30353f;color:#fff;display:flex;flex-direction:column;min-width:0}
+.ws-h{font:700 12px system-ui;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;color:#aab0bf;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pal{overflow:auto;max-height:640px;padding:0 10px 12px}
+.pcat{font:700 11px system-ui;text-transform:uppercase;letter-spacing:.05em;margin:12px 0 4px;display:flex;align-items:center;gap:6px;color:#dfe3ec}
+.pcat::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.pitem{cursor:pointer;transition:transform .1s}
+.pitem:hover{transform:translateX(3px);filter:brightness(1.08)}
+.pitem *{pointer-events:none}
+.pfn{font:12px ui-monospace,Consolas,monospace;background:#454b57;border-radius:6px;padding:4px 7px;margin:3px 0;color:#ffe2c7}
+.ref{margin-top:12px;font-size:12px;color:#cfd3dd}
+.ref summary{cursor:pointer;font-weight:700;color:#fff}
+.ref table{border-collapse:collapse;margin-top:6px}
+.ref td{padding:3px 4px;border-bottom:1px solid #444a56;vertical-align:top}
+.ref td:first-child{font-family:ui-monospace,Consolas,monospace;color:#c8f59e;white-space:nowrap}
+.ws-scr{background:#e9ecf2;background-image:radial-gradient(#d3d8e2 1px,transparent 1px);background-size:16px 16px;display:flex;flex-direction:column;min-width:0;border-left:1px solid #d5dae5;border-right:1px solid #d5dae5}
+.ws-scr .ws-h{color:#5b6475;background:rgba(255,255,255,.6)}
+.ws-tools{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.ws-tools button{font:600 11px system-ui;text-transform:none;letter-spacing:0;border:1px solid #c9cfdb;background:#fff;border-radius:6px;padding:3px 7px;cursor:pointer;color:#1d2433}
+.ws-tools button:hover{background:#f3f5fa}
+.scr{overflow:auto;padding:14px;max-height:640px;min-height:300px;flex:1}
+.hint{font-size:12px;color:#5b6475;padding:6px 12px;border-top:1px solid #d5dae5;background:rgba(255,255,255,.7)}
+.ws-stage{padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0;background:#fafbfd}
+.stagebar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px}
+.go{background:#2fa24f;color:#fff;border:0;border-radius:8px;padding:6px 14px;font:700 14px system-ui;cursor:pointer}
+.go:hover{filter:brightness(1.1)}
+.stop{background:#e04848;color:#fff;border:0;border-radius:8px;padding:6px 11px;font:700 14px system-ui;cursor:pointer}
+.stagebar select{font-size:13px;border-radius:6px;border:1px solid #c9cfdb;padding:3px}
+.stagebar label{display:flex;align-items:center;gap:4px;color:#5b6475}
+.ws canvas.stage{width:100%;aspect-ratio:4/3;border:1px solid #cfd5e1;border-radius:6px;background:#fff;display:block}
+.coords{font:12px ui-monospace,Consolas,monospace;color:#5b6475;display:flex;justify-content:space-between}
+.msg{font-size:13px;min-height:0}
+.msg.e{background:#fdeeee;border:1px solid #f3b5b5;color:#9b1c1c;padding:6px 9px;border-radius:6px}
+.msg.i{color:#2f7d43}
+.watchers{display:flex;flex-wrap:wrap;gap:6px}
+.watch{background:#fff;border:1px solid #d5dae5;border-radius:6px;font-size:12px;display:inline-flex;align-items:flex-start;gap:6px;padding:3px 3px 3px 7px}
+.watch>span{font-weight:700;color:#5b6475;padding-top:1px}
+.watch>b{background:var(--variables);color:#fff;border-radius:4px;padding:1px 7px;font-weight:600;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.watch.lw{flex-direction:column;gap:2px;padding:4px 6px}
+.watch.lw table{border-collapse:collapse;font-size:12px}
+.watch.lw td{border:1px solid #e1e5ee;padding:1px 6px}
+.watch.lw td:first-child{color:#8a8fa3;background:#f3f5fa;text-align:right}
+.watch.lw td:last-child{background:var(--lists);color:#fff;min-width:40px}
+.watch.lw small{color:#8a8fa3}
+.log{font-size:12.5px;max-height:130px;overflow:auto;background:#fff;border:1px solid #e1e5ee;border-radius:6px;padding:4px 8px;display:none}
+.log.has{display:block}
+.log div{border-bottom:1px dotted #e1e5ee;padding:2px 0}
+@media (max-width:1020px){.ws{grid-template-columns:1fr}.pal{max-height:260px}.scr{max-height:none}.ws-scr{border:0;border-top:1px solid #d5dae5;border-bottom:1px solid #d5dae5}}
+
+/* ---------- Quiz, Puzzle, Lückentext ---------- */
+.qq{margin:12px 0 16px}
+.qq p{margin:0 0 6px;font-weight:600}
+.qq label{display:block;padding:5px 9px;border:1px solid var(--line);border-radius:8px;margin:4px 0;cursor:pointer;background:#fafbfd}
+.qq label:hover{background:#f0f3fa}
+.qq label.right{background:#e3f6e8;border-color:#2fa24f}
+.qq label.wrong{background:#fdeeee;border-color:#e04848}
+.qq .ex{font-size:14px;color:var(--muted);margin-top:4px;display:none}
+.qq.done .ex{display:block}
+.qres{font-weight:700;margin-left:10px}
+.parsons{list-style:none;padding:0;margin:10px 0;max-width:640px}
+.parsons li{background:#fff;border:1px solid #c9cfdb;border-radius:8px;padding:7px 10px;margin:5px 0;display:flex;align-items:center;gap:8px;cursor:grab;font-family:ui-monospace,Consolas,monospace;font-size:14px;white-space:pre}
+.parsons li.dragging{opacity:.4}
+.parsons li .mv{margin-left:auto;display:flex;gap:3px}
+.parsons li .mv button{border:1px solid #c9cfdb;background:#f7f8fb;border-radius:5px;width:26px;height:24px;cursor:pointer}
+.parsons li.right{border-color:#2fa24f;background:#e9f8ed}
+.parsons li.wrong{border-color:#e04848;background:#fdf0f0}
+.cloze input{font:inherit;width:8ch;border:0;border-bottom:2px solid #8a8fa3;background:#f7f8fb;padding:0 4px;text-align:center}
+.cloze input.right{border-color:#2fa24f;background:#e9f8ed}
+.cloze input.wrong{border-color:#e04848;background:#fdf0f0}
+.feedback{font-weight:700;margin-left:8px}
+
+/* ---------- Widgets ---------- */
+.uimock{display:grid;grid-template-columns:150px 1.4fr 1fr;grid-template-rows:38px 70px 150px 90px;gap:4px;max-width:760px;background:#22262e;padding:4px;border-radius:10px;font:600 13px system-ui;color:#fff;grid-template-areas:"menu menu menu" "cats script stage" "pal script stage" "pal script corral"}
+.uimock div{border-radius:6px;padding:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;transition:.15s;border:2px solid transparent}
+.uimock div:hover,.uimock div.on{border-color:#ffd400}
+.um-menu{grid-area:menu;background:#3a404c}.um-cats{grid-area:cats;background:#4b5260}.um-pal{grid-area:pal;background:#3a404c}.um-script{grid-area:script;background:#7f8696}.um-stage{grid-area:stage;background:#fff;color:#22262e!important}.um-corral{grid-area:corral;background:#5d6473}
+.uminfo{max-width:760px;margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:52px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;max-width:960px;margin:10px 0}
+.catgrid div{border-radius:8px;padding:8px 10px;color:#fff;font-size:14px}
+.catgrid b{display:block}
+.widget{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:16px 0;max-width:960px}
+.widget h4{margin:0 0 8px}
+.neck{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.neck canvas{width:min(100%,380px);aspect-ratio:13/9;border:1px solid var(--line);border-radius:8px}
+.neck input[type=range]{width:220px}
+.machine{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:18px}
+.machine .mbox{background:linear-gradient(135deg,#62c213,#3e9a00);color:#fff;border-radius:12px;padding:16px 20px;font-weight:800;min-width:150px;text-align:center;box-shadow:0 6px 0 #2c6e00}
+.machine .mbox.spin{animation:shake .4s}
+@keyframes shake{25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+.machine input{font-size:18px;width:90px;padding:4px 8px;border-radius:8px;border:1px solid #c9cfdb}
+.machine .out{font-weight:800;min-width:90px;padding:6px 12px;border-radius:8px;background:#f0f3fa}
+.lp{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.lp .ctrls{display:grid;gap:6px;min-width:260px}
+.lp .ctrls div{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lp input{width:90px;padding:4px 6px;border-radius:6px;border:1px solid #c9cfdb;font:inherit}
+.lp .lout{font-family:ui-monospace,Consolas,monospace;font-size:14px;background:#f3f5fa;border-radius:8px;padding:8px 10px;margin-top:6px}
+.lwbig td{font-size:15px!important;padding:4px 10px!important}
+.trace td input{width:5ch}
+.snapframe{width:100%;height:640px;border:1px solid var(--line);border-radius:10px;margin-top:10px;background:#fff}
+.pill{display:inline-block;font:700 12px system-ui;border-radius:20px;padding:1px 9px;background:#eef0f6;color:var(--muted);margin-right:4px}
+.projhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.projhead h3{margin:0}
+.stars{color:#e0a800;letter-spacing:1px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="brand"><div class="logo">λ</div><div><b>Algorithmen mit Snap!</b><small>Interaktiver Programmierkurs</small></div></div>
+    <nav id="nav" aria-label="Kapitel"></nav>
+  </div>
+  <div class="progress"><div id="progbar"></div></div>
+</header>
+
+<main>
+<!-- ======================= START ======================= -->
+<section class="chap" id="start" data-nav="Start">
+  <h1>Algorithmen – Programmieren lernen mit Snap!</h1>
+  <p class="lead">In diesem interaktiven Lehrgang lernst du, wie man Probleme mit Hilfe von Algorithmen löst – kurz gesagt: Du lernst programmieren. Dazu verwenden wir eine blockbasierte Programmiersprache, bei der du Programme wie Puzzleteile zusammensetzt.</p>
+
+  <div class="prose">
+    <p>Bekannte Programmiersprachen wie Python, Java oder JavaScript werden als Text geschrieben. Bei <b>Snap!</b> (entwickelt an der University of California, Berkeley) baust du dein Programm dagegen aus farbigen Blöcken. So musst du dich nicht um Tippfehler und Klammern kümmern, sondern kannst dich ganz auf die Idee – den <b>Algorithmus</b> – konzentrieren.</p>
+    <p>Auf dieser Seite findest du in jedem Kapitel einen <b>Baukasten</b>, der wie Snap! funktioniert. Du kannst die Beispiele direkt starten, verändern und eigene Programme bauen. Was du hier lernst, kannst du anschließend 1:1 im echten Snap! nachbauen.</p>
+  </div>
+
+  <h2>So ist der Kurs aufgebaut</h2>
+  <div class="cards" id="chapcards"></div>
+
+  <h2>Die Kästen in diesem Kurs</h2>
+  <div class="legend">
+    <div class="box merk"><h4>💡 Merke</h4><p>Wichtige Informationen und Merksätze</p></div>
+    <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Eine Aufgabe für dich – Lösungsvorschläge stehen darunter. Versuche es aber zuerst selbst!</p></div>
+    <div class="box tipp"><h4>🔎 Tipp</h4><p>Hilfreiche Tipps und Hinweise</p></div>
+    <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Was du für eine Aufgabe oder ein Projekt schon können solltest</p></div>
+    <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Ideen für selbstständige Erweiterungen – ohne Lösung</p></div>
+    <div class="box quiz"><h4>❓ Quiz</h4><p>Quiz, Lückentexte und kleine Tests</p></div>
+    <div class="box gesell"><h4>🌍 Digitalisierung, Individuum und Gesellschaft</h4><p>Wie Algorithmen uns und unsere Gesellschaft beeinflussen</p></div>
+  </div>
+
+  <h2>So bedienst du den Baukasten</h2>
+  <div class="prose">
+    <ol>
+      <li><b>Bereich wählen:</b> Klicke im grauen Skriptbereich auf die gelb gestrichelt markierte Stelle – dorthin werden neue Blöcke angehängt. In Schleifen und Verzweigungen kannst du auf die „Lücke“ (den Mund) klicken.</li>
+      <li><b>Block hinzufügen:</b> Klicke links in der Palette auf einen Block. Er wird am Ende des markierten Bereichs eingefügt.</li>
+      <li><b>Werte ändern:</b> Klicke in die weißen Felder und tippe Zahlen, Text oder Rechenausdrücke ein (z. B. <code>360 / 5</code>).</li>
+      <li><b>Ordnen:</b> Mit ▲ ▼ verschiebst du einen Block, mit ⧉ verdoppelst du ihn, mit ✕ löschst du ihn.</li>
+      <li><b>Starten:</b> Klicke auf <b>⚑ Start</b>. Der gerade ausgeführte Block leuchtet gelb. Mit dem Tempo-Regler kannst du dein Programm in Zeitlupe beobachten.</li>
+    </ol>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp: Der Unterschied zum echten Snap!</h4>
+    <p>Im echten Snap! ziehst du Blöcke mit der Maus und setzt Rechnungen aus grünen Operator-Blöcken zusammen (z. B. <span class="blocks inline" data-b="op:360 / 5"></span>). Im Baukasten hier tippst du diese Rechnungen einfach in das Eingabefeld. Text kannst du direkt eintippen; wenn du Text mit Variablen verbindest, setze ihn in Anführungszeichen: <code>verbinde("Hallo ", name)</code>.</p>
+    <p>Deine Programme werden in diesem Browser automatisch gespeichert.</p>
+  </div>
+
+  <h2>Das echte Snap! öffnen</h2>
+  <p class="prose">Snap! läuft direkt im Browser, ohne Installation: <a href="https://snap.berkeley.edu/snap/snap.html" target="_blank" rel="noopener">snap.berkeley.edu/snap/snap.html</a>. Du kannst es auch hier auf der Seite öffnen und neben dem Kurs verwenden.</p>
+  <button class="btn pri" data-snapframe="sf0">Snap! hier einblenden</button>
+  <div id="sf0"></div>
+</section>
+
+<!-- ======================= 1 GRUNDLAGEN ======================= -->
+<section class="chap" id="grundlagen" data-nav="1 Grundlagen" data-sub="Algorithmus, Snap!-Oberfläche, Koordinaten, Sequenz">
+  <h1>1 · Grundlagen</h1>
+  <p class="lead">Was ist ein Algorithmus? Wie ist Snap! aufgebaut? Und wie bringst du ein Sprite dazu, zu laufen und zu zeichnen?</p>
+
+  <h2>1.1 Was ist ein Algorithmus?</h2>
+  <div class="prose">
+    <p>Jeden Tag folgst du Anleitungen: einem Kochrezept, einer Wegbeschreibung, einer Bauanleitung. Damit ein <b>Computer</b> eine Anleitung ausführen kann, muss sie besonders genau sein – denn der Computer denkt nicht mit. Er macht exakt das, was dasteht.</p>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Algorithmus</h4>
+    <p>Ein <b>Algorithmus</b> ist eine eindeutige Handlungsvorschrift aus endlich vielen Schritten zur Lösung eines Problems. Ein Algorithmus ist</p>
+    <ul>
+      <li><b>eindeutig</b> – jeder Schritt ist genau festgelegt, es gibt keinen Interpretationsspielraum,</li>
+      <li><b>ausführbar</b> – jeder Schritt kann tatsächlich durchgeführt werden,</li>
+      <li><b>endlich</b> – die Beschreibung besteht aus endlich vielen Schritten,</li>
+      <li><b>terminierend</b> – er kommt nach endlich vielen Schritten zu einem Ende (Ergebnis).</li>
+    </ul>
+    <p>Ein <b>Programm</b> ist ein Algorithmus, der in einer Programmiersprache aufgeschrieben ist, die ein Computer ausführen kann.</p>
+  </div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 1.1 – Tee kochen</h4>
+    <p>Bringe die Schritte des Algorithmus „Eine Tasse Tee kochen“ in die richtige Reihenfolge. Ziehe die Zeilen mit der Maus oder benutze die Pfeile.</p>
+    <div class="parsons-host" data-parsons="tee"></div>
+  </div>
+
+  <h2>1.2 Snap! kennenlernen</h2>
+  <p class="prose">Wenn du Snap! öffnest, siehst du verschiedene Bereiche. Klicke auf einen Bereich, um mehr zu erfahren:</p>
+  <div class="uimock" id="uimock">
+    <div class="um-menu" data-i="<b>Menüleiste:</b> Hier kannst du Projekte speichern, öffnen und exportieren (Dateisymbol), dich in der Snap!-Cloud anmelden und Einstellungen wie die Sprache ändern. Rechts oben sitzen die grüne Flagge ⚑ zum Starten und das rote Stoppschild ■.">Menüleiste &nbsp;📄 ☁ ⚙ &nbsp;&nbsp;&nbsp; ⚑ ■</div>
+    <div class="um-cats" data-i="<b>Kategorien:</b> Die Blöcke sind nach Farben sortiert: Bewegung, Aussehen, Klang, Stift, Steuerung, Fühlen, Operatoren und Variablen.">Kategorien</div>
+    <div class="um-pal" data-i="<b>Blockpalette:</b> Hier liegen alle Blöcke der gewählten Kategorie. Du ziehst sie mit der Maus in den Skriptbereich.">Block&shy;palette</div>
+    <div class="um-script" data-i="<b>Skriptbereich:</b> Hier setzt du die Blöcke zu Programmen (Skripten) zusammen. Blöcke, die zusammengehören, rasten wie Puzzleteile ineinander ein.">Skriptbereich</div>
+    <div class="um-stage" data-i="<b>Bühne:</b> Hier sieht man, was das Programm tut. Die Figur (das <b>Sprite</b>, standardmäßig ein Pfeil) bewegt sich, spricht und zeichnet. Die Bühne ist 480 × 360 Schritte groß.">Bühne ➤</div>
+    <div class="um-corral" data-i="<b>Sprite-Korral:</b> Hier siehst du alle Sprites deines Projekts. Jedes Sprite hat seine eigenen Skripte. Mit dem Knopf über dem Korral kannst du neue Sprites erzeugen.">Sprite-Korral</div>
+  </div>
+  <div class="uminfo" id="uminfo">👆 Klicke auf einen Bereich der Snap!-Oberfläche.</div>
+
+  <h3>Die Blockkategorien</h3>
+  <div class="catgrid">
+    <div style="background:var(--motion)"><b>Bewegung</b>gehen, drehen, Position</div>
+    <div style="background:var(--looks)"><b>Aussehen</b>sagen, Kostüme, Größe</div>
+    <div style="background:#cf4ad9"><b>Klang</b>Töne und Musik</div>
+    <div style="background:var(--pen)"><b>Stift</b>zeichnen, Farbe, Dicke</div>
+    <div style="background:var(--control)"><b>Steuerung</b>Start, Schleifen, Verzweigungen</div>
+    <div style="background:var(--sensing)"><b>Fühlen</b>Fragen, Maus, Tastatur</div>
+    <div style="background:var(--operators)"><b>Operatoren</b>Rechnen, Vergleichen, Zufall</div>
+    <div style="background:var(--variables)"><b>Variablen</b>Variablen und Listen</div>
+  </div>
+
+  <h2>1.3 Die Bühne und ihre Koordinaten</h2>
+  <div class="prose"><p>Damit man genau sagen kann, wo sich das Sprite befindet, hat die Bühne ein <b>Koordinatensystem</b> – genau wie in Mathe.</p></div>
+  <div class="box merk"><h4>💡 Merke: Koordinaten und Richtung</h4>
+    <ul>
+      <li>Die Bühne ist <b>480</b> Schritte breit und <b>360</b> Schritte hoch.</li>
+      <li>Der Mittelpunkt hat die Koordinaten <b>(0 | 0)</b>. Die x-Werte reichen von −240 (links) bis 240 (rechts), die y-Werte von −180 (unten) bis 180 (oben).</li>
+      <li>Die Richtung wird in Grad angegeben: <b>0</b> = nach oben, <b>90</b> = nach rechts, <b>180</b> = nach unten, <b>−90</b> = nach links. Zu Beginn schaut das Sprite nach rechts (90).</li>
+    </ul>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp</h4><p>Im Baukasten unten kannst du das Koordinatengitter einschalten. Fährst du mit der Maus über die Bühne, siehst du die Koordinaten des Mauszeigers.</p></div>
+
+  <h2>1.4 Die Sequenz – eine Anweisung nach der anderen</h2>
+  <div class="prose">
+    <p>Die einfachste Form eines Algorithmus ist die <b>Sequenz</b> (Folge): Die Blöcke werden von oben nach unten nacheinander ausgeführt. Jedes Programm beginnt mit einem Startblock – dem „Hut“ <span class="blocks inline" data-b="hat"></span>.</p>
+    <p>Mit dem <b>Stift</b> zeichnet das Sprite eine Spur, wenn es läuft. <span class="blocks inline" data-b="down"></span> setzt den Stift ab, <span class="blocks inline" data-b="up"></span> hebt ihn an.</p>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Sequenz</h4><p>Eine <b>Sequenz</b> ist eine Folge von Anweisungen, die genau in der angegebenen Reihenfolge nacheinander ausgeführt werden. Die Reihenfolge ist wichtig: Vertauscht man Anweisungen, kann ein ganz anderes Ergebnis entstehen.</p></div>
+
+  <div class="ws" data-ws="G1"></div>
+
+  <div class="box aufgabe"><h4>✏️ Aufgabe 1.2 – Zeichnen mit Sequenzen</h4>
+    <p>Starte das Programm im Baukasten. Es zeichnet ein Quadrat. Verändere das Programm dann so, dass es</p>
+    <ol type="a"><li>ein Rechteck mit 150 × 80 Schritten,</li><li>ein gleichseitiges Dreieck mit der Seitenlänge 120,</li><li>eine Treppe mit drei Stufen</li></ol>
+    <p>zeichnet.</p>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp zum Dreieck</h4><p>Das Sprite dreht sich an jeder Ecke um den <b>Außenwinkel</b>. Beim Dreieck sind die Innenwinkel 60°, das Sprite muss sich also um 180° − 60° = 120° drehen. Insgesamt dreht es sich einmal ganz herum: 3 · 120° = 360°.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag a) Rechteck</summary><div class="solrow"><div class="blocks" data-prog="G_rect"></div></div><button class="btn" data-load="G_rect" data-into="G1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b) Dreieck</summary><div class="solrow"><div class="blocks" data-prog="G_tri"></div></div><button class="btn" data-load="G_tri" data-into="G1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag c) Treppe</summary><div class="solrow"><div class="blocks" data-prog="G_stairs"></div></div><button class="btn" data-load="G_stairs" data-into="G1">In den Baukasten laden</button></details>
+
+  <div class="box aufgabe"><h4>✏️ Aufgabe 1.3 – Bilderrahmen mit „gehe zu“</h4>
+    <p>Mit <span class="blocks inline" data-b="goto:-200;-150"></span> springt das Sprite direkt an einen Punkt. Ist der Stift unten, zeichnet es dabei eine gerade Linie. Zeichne damit einen Rahmen, der 40 Schritte vom Bühnenrand entfernt ist.</p>
+  </div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="G_frame"></div><br><button class="btn" data-load="G_frame" data-into="G1">In den Baukasten laden</button></details>
+
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Zeichne deine Initialen mit „gehe zu“-Blöcken. Ändere zwischendurch Stiftfarbe und Stiftdicke. Lass das Sprite am Ende mit <span class="blocks inline" data-b="say:Fertig!"></span> etwas sagen.</p></div>
+
+  <div class="box quiz"><h4>❓ Lückentext</h4>
+    <div class="cloze">Die Bühne in Snap! ist [[480]] Schritte breit und [[360]] Schritte hoch. Der Mittelpunkt hat die Koordinaten ( [[0]] | [[0]] ). Ein Sprite mit der Richtung [[90]] schaut nach rechts, eines mit der Richtung [[0]] nach oben. Werden Anweisungen einfach nacheinander ausgeführt, spricht man von einer [[Sequenz|Folge]].</div>
+  </div>
+  <div class="box quiz"><h4>❓ Quiz: Grundlagen</h4><div class="quiz-host" data-quiz="g"></div></div>
+
+  <div class="box gesell"><h4>🌍 Digitalisierung, Individuum und Gesellschaft: Algorithmen im Alltag</h4>
+    <p>Algorithmen begegnen dir ständig – oft, ohne dass du es merkst: Das Navi berechnet den kürzesten Weg, der Supermarkt-Scanner addiert die Preise, Ampeln schalten nach festen Regeln, und Streaming-Dienste schlagen dir Filme vor. Überlege: Welche Entscheidungen werden in deinem Alltag schon heute von Algorithmen getroffen oder vorbereitet? Und wo sollte weiterhin ein Mensch entscheiden?</p>
+  </div>
+</section>
+
+<!-- ======================= 2 KONTROLLSTRUKTUREN ======================= -->
+<section class="chap" id="kontroll" data-nav="2 Kontrollstrukturen" data-sub="Schleifen, Verschachtelung, Verzweigungen">
+  <h1>2 · Kontrollstrukturen</h1>
+  <p class="lead">Mit Kontrollstrukturen steuerst du den Ablauf eines Programms: Blöcke werden wiederholt oder nur unter bestimmten Bedingungen ausgeführt.</p>
+
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Sequenz, Bewegungs- und Stiftblöcke (Kapitel 1)</p></div>
+
+  <h2>2.1 Wiederholung mit fester Anzahl</h2>
+  <div class="prose"><p>Beim Quadrat aus Kapitel 1 stehen die Blöcke <span class="blocks inline" data-b="move:100"></span> und <span class="blocks inline" data-b="turnR:90"></span> viermal hintereinander. Das ist umständlich. Besser: Wir sagen dem Computer, dass er diese zwei Blöcke <b>viermal wiederholen</b> soll.</p></div>
+  <div class="solrow"><div class="blocks" data-prog="K1"></div></div>
+  <div class="box merk"><h4>💡 Merke: Zählschleife</h4><p>Der Block <b>wiederhole … mal</b> ist eine <b>Wiederholung mit fester Anzahl</b> (Zählschleife). Die Blöcke im „Mund“ der Schleife werden so oft ausgeführt, wie angegeben. Danach geht es mit dem Block unter der Schleife weiter.</p></div>
+
+  <div class="ws" data-ws="K1"></div>
+
+  <h3>Regelmäßige Vielecke</h3>
+  <div class="prose"><p>Ein Sprite, das ein regelmäßiges Vieleck zeichnet, dreht sich insgesamt immer genau einmal im Kreis, also um 360°. Bei <i>n</i> Ecken muss es sich an jeder Ecke um <b>360° : n</b> drehen. Probiere es mit dem Regler aus:</p></div>
+  <div class="widget"><h4>🔷 Vieleck-Werkstatt</h4>
+    <div class="neck"><canvas id="neckcv" width="520" height="360"></canvas>
+      <div><label><b>Anzahl der Ecken: <span id="neckn">5</span></b><br><input type="range" id="neckr" min="3" max="12" value="5"></label>
+      <div id="neckcode" style="margin-top:10px"></div></div></div>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Vieleck</h4><p>Für ein regelmäßiges n-Eck: <b>wiederhole n mal</b> { gehe Seitenlänge Schritte; drehe 360 / n Grad }</p></div>
+
+  <div class="box aufgabe"><h4>✏️ Aufgabe 2.1 – Vielecke und Kreis</h4>
+    <ol type="a"><li>Zeichne mit einer Schleife ein regelmäßiges Sechseck.</li><li>Zeichne einen „Kreis“. Tipp: Ein Vieleck mit sehr vielen Ecken sieht aus wie ein Kreis.</li><li>Zeichne die Treppe aus Aufgabe 1.2 c) jetzt mit einer Schleife und fünf Stufen.</li></ol>
+  </div>
+  <details class="sol"><summary>Lösungsvorschlag a) Sechseck</summary><div class="blocks" data-prog="K_hex"></div><br><button class="btn" data-load="K_hex" data-into="K1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b) Kreis</summary><div class="blocks" data-prog="K_circle"></div><br><button class="btn" data-load="K_circle" data-into="K1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag c) Treppe</summary><div class="blocks" data-prog="K_stairs"></div><br><button class="btn" data-load="K_stairs" data-into="K1">In den Baukasten laden</button></details>
+
+  <h2>2.2 Verschachtelte Schleifen</h2>
+  <div class="prose"><p>In den Mund einer Schleife darf wieder eine Schleife gesetzt werden. Man spricht von <b>verschachtelten Schleifen</b>. Die innere Schleife wird bei jedem Durchlauf der äußeren Schleife komplett ausgeführt. So entstehen schöne Muster:</p></div>
+  <div class="solrow"><div class="blocks" data-prog="K_flower"></div></div>
+  <button class="btn" data-load="K_flower" data-into="K1">Blume in den Baukasten laden</button>
+  <div class="box merk"><h4>💡 Merke: Verschachtelung</h4><p>Läuft die äußere Schleife <i>a</i>-mal und die innere <i>b</i>-mal, werden die Blöcke in der inneren Schleife insgesamt <b>a · b</b>-mal ausgeführt. Bei der Blume: 12 · 4 = 48 Linien.</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 2.2 – Rosette</h4><p>Zeichne eine Rosette aus 10 Sechsecken. Nach jedem Sechseck dreht sich das Sprite so weit, dass die Sechsecke gleichmäßig verteilt sind.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="K_rosette"></div><br><button class="btn" data-load="K_rosette" data-into="K1">In den Baukasten laden</button></details>
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Ändere bei jedem Sechseck die Stiftfarbe auf „zufällig“. Kannst du auch eine Rosette aus Quadraten oder Dreiecken zeichnen?</p></div>
+
+  <h2>2.3 Verzweigungen – falls … sonst</h2>
+  <div class="prose">
+    <p>Oft soll ein Programm abhängig von einer <b>Bedingung</b> unterschiedlich reagieren. Eine Bedingung ist eine Aussage, die entweder <b>wahr</b> oder <b>falsch</b> ist, zum Beispiel <code>Antwort > 12</code>. In Snap! haben Bedingungen eine sechseckige Form.</p>
+    <p>Mit <span class="blocks inline" data-b="ask:Wie alt bist du?"></span> stellt das Sprite eine Frage. Die Eingabe steht anschließend in <b>Antwort</b>.</p>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Verzweigung</h4>
+    <ul>
+      <li><b>falls &lt;Bedingung&gt;</b> (einseitige Verzweigung): Die Blöcke im Mund werden nur ausgeführt, wenn die Bedingung wahr ist.</li>
+      <li><b>falls &lt;Bedingung&gt; … sonst …</b> (zweiseitige Verzweigung): Ist die Bedingung wahr, wird der obere Teil ausgeführt, sonst der untere Teil.</li>
+    </ul>
+    <p>Vergleichsoperatoren: <code>=</code> gleich, <code>≠</code> ungleich, <code>&lt;</code> kleiner, <code>&gt;</code> größer, <code>≤</code> kleiner gleich, <code>≥</code> größer gleich. Bedingungen verknüpfst du mit <code>und</code>, <code>oder</code>, <code>nicht</code>.</p>
+  </div>
+
+  <div class="ws" data-ws="K2"></div>
+
+  <div class="box tipp"><h4>🔎 Tipp: Rest bei der Division</h4><p><code>a mod b</code> berechnet den Rest, der bei der Division a : b bleibt. Beispiel: 17 mod 5 = 2. Eine Zahl ist gerade, wenn <code>zahl mod 2 = 0</code> gilt.</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 2.3 – Verzweigungen</h4>
+    <ol type="a"><li>Das Sprite fragt nach dem Alter. Ist man mindestens 12 Jahre alt, antwortet es „Du darfst den Film sehen.“, sonst „Leider bist du noch zu jung.“</li>
+    <li><b>Notenrechner:</b> Das Sprite fragt nach der Punktzahl (0–100) und gibt die Note aus: ab 85 Punkten eine 1, ab 70 eine 2, ab 55 eine 3, ab 40 eine 4, ab 20 eine 5, sonst eine 6.</li></ol>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp zu b)</h4><p>Setze in den sonst-Teil einer Verzweigung eine weitere Verzweigung. So prüfst du die Grenzen nacheinander von oben nach unten.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag a)</summary><div class="blocks" data-prog="K_age"></div><br><button class="btn" data-load="K_age" data-into="K2">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b)</summary><div class="blocks" data-prog="K_grade"></div><br><button class="btn" data-load="K_grade" data-into="K2">In den Baukasten laden</button></details>
+
+  <h2>2.4 Bedingte Wiederholung – wiederhole bis</h2>
+  <div class="prose"><p>Manchmal weiß man vorher nicht, wie oft etwas wiederholt werden muss. Dann hilft <b>wiederhole bis &lt;Bedingung&gt;</b>: Die Schleife läuft so lange, bis die Bedingung wahr wird. Beispiel: Das Sprite läuft, bis es den rechten Rand erreicht. Mit <code>xposition</code> erhältst du die aktuelle x-Koordinate des Sprites.</p></div>
+  <div class="solrow"><div class="blocks" data-prog="K3"></div></div>
+  <button class="btn" data-load="K3" data-into="K2">In den Baukasten laden</button>
+  <div class="box merk"><h4>💡 Merke: Bedingte Wiederholung</h4><p>Bei <b>wiederhole bis</b> wird <i>vor</i> jedem Durchlauf geprüft, ob die Bedingung erfüllt ist. Ist sie wahr, endet die Schleife. Achtung: Wird die Bedingung nie wahr, entsteht eine <b>Endlosschleife</b>!</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 2.4 – Passwort</h4><p>Das Sprite fragt so lange nach einem Passwort, bis „geheim“ eingegeben wird. Bei falscher Eingabe sagt es „Falsch!“, am Ende „Willkommen!“.</p></div>
+  <div class="box tipp"><h4>🔎 Tipp</h4><p>Text in einer Bedingung muss in Anführungszeichen stehen: <code>Antwort = "geheim"</code></p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="K_pass"></div><br><button class="btn" data-load="K_pass" data-into="K2">In den Baukasten laden</button></details>
+
+  <div class="box quiz"><h4>❓ Puzzle: Ordne das Programm</h4><p>Bringe die Zeilen so in Reihenfolge, dass ein Quadrat gezeichnet wird und das Sprite danach „Fertig!“ sagt. Eingerückte Zeilen gehören in die Schleife.</p><div class="parsons-host" data-parsons="quadrat"></div></div>
+  <div class="box quiz"><h4>❓ Lückentext</h4>
+    <div class="cloze">Mit dem Block „wiederhole … mal“ erzeugt man eine [[Schleife|Wiederholung|Zählschleife]]. Für ein regelmäßiges Achteck muss sich das Sprite an jeder Ecke um [[45]] Grad drehen. Ein Block „falls … sonst“ ist eine zweiseitige [[Verzweigung]]. Eine Bedingung ist entweder [[wahr]] oder [[falsch]].</div>
+  </div>
+  <div class="box quiz"><h4>❓ Quiz: Kontrollstrukturen</h4><div class="quiz-host" data-quiz="k"></div></div>
+</section>
+
+<!-- ======================= 3 VARIABLEN ======================= -->
+<section class="chap" id="variablen" data-nav="3 Variablen" data-sub="Werte speichern, zählen, Zufall, Eingaben">
+  <h1>3 · Variablen</h1>
+  <p class="lead">Variablen sind das Gedächtnis eines Programms. In ihnen speicherst du Werte, die sich während des Programmablaufs verändern können.</p>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Schleifen und Verzweigungen (Kapitel 2)</p></div>
+
+  <h2>3.1 Was ist eine Variable?</h2>
+  <div class="prose"><p>Stell dir eine Variable wie eine <b>beschriftete Schachtel</b> vor. Auf der Schachtel steht ein Name (z. B. <i>punkte</i>), und in der Schachtel liegt genau ein Wert (z. B. <i>12</i>). Legst du einen neuen Wert hinein, ist der alte weg.</p></div>
+  <div class="box merk"><h4>💡 Merke: Variable</h4>
+    <p>Eine <b>Variable</b> ist ein benannter Speicherplatz für einen Wert. Sie hat einen <b>Namen</b> und einen <b>Wert</b>, der sich während des Programms ändern kann.</p>
+    <ul>
+      <li><span class="blocks inline" data-b="set:punkte;0"></span> weist der Variablen einen Wert zu (<b>Zuweisung</b>).</li>
+      <li><span class="blocks inline" data-b="change:punkte;1"></span> erhöht den Wert um 1 (mit −1 wird er verringert).</li>
+      <li>Wo du den Namen der Variablen in ein Eingabefeld schreibst, wird ihr aktueller Wert verwendet.</li>
+    </ul>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp: Variablen in Snap!</h4><p>Im echten Snap! legst du eine Variable in der Kategorie <b>Variablen</b> mit dem Knopf „Neue Variable“ an. Danach erscheint ein oranger Block mit ihrem Namen. Im Baukasten hier entsteht eine Variable automatisch beim ersten „setze“-Block. Ihr Wert wird unter der Bühne angezeigt.</p></div>
+
+  <h2>3.2 Schreibtischtest</h2>
+  <div class="prose"><p>Programmierer überprüfen Programme oft per Hand: Man geht Zeile für Zeile durch und notiert die Werte aller Variablen. Das nennt man einen <b>Schreibtischtest</b> oder eine Trace-Tabelle.</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 3.1 – Trace-Tabelle</h4>
+    <div class="solrow"><div class="blocks" data-prog="V_trace"></div>
+    <div class="cloze trace"><table class="t"><tr><th>nach Zeile</th><th>a</th><th>b</th><th>c</th></tr>
+      <tr><td>1</td><td>[[4]]</td><td>–</td><td>–</td></tr>
+      <tr><td>2</td><td>4</td><td>[[7]]</td><td>–</td></tr>
+      <tr><td>3</td><td>[[11]]</td><td>7</td><td>–</td></tr>
+      <tr><td>4</td><td>11</td><td>[[5]]</td><td>–</td></tr>
+      <tr><td>5</td><td>11</td><td>5</td><td>[[55]]</td></tr></table></div></div>
+    <p>Kontrolliere dich anschließend: Lade das Programm in den Baukasten, stelle das Tempo auf „Zeitlupe“ und beobachte die Variablen.</p>
+    <button class="btn" data-load="V_trace" data-into="V1">In den Baukasten laden</button>
+  </div>
+
+  <h2>3.3 Variablen in Schleifen – die Spirale</h2>
+  <div class="prose"><p>Spannend wird es, wenn sich eine Variable in einer Schleife verändert. Hier wird die Strecke bei jedem Durchlauf um 5 Schritte länger – es entsteht eine Spirale. Beobachte unter der Bühne, wie sich der Wert von <i>länge</i> verändert.</p></div>
+  <div class="ws" data-ws="V1"></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 3.2 – Spiralen</h4>
+    <ol type="a"><li>Ändere die Spirale so, dass sie dreieckig wird.</li><li>Erstelle eine bunte Sechseck-Spirale, bei der jede Linie eine zufällige Farbe hat. Probiere auch einen Drehwinkel von 59° statt 60° aus!</li></ol>
+  </div>
+  <details class="sol"><summary>Lösungsvorschlag a)</summary><div class="blocks" data-prog="V_tri"></div><br><button class="btn" data-load="V_tri" data-into="V1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b)</summary><div class="blocks" data-prog="V_rainbow"></div><br><button class="btn" data-load="V_rainbow" data-into="V1">In den Baukasten laden</button></details>
+
+  <h2>3.4 Zählen und Summieren</h2>
+  <div class="prose"><p>Ein typischer Einsatz von Variablen: Man addiert in einer Schleife Werte auf. Der Block <span class="blocks inline" data-b="forhead"></span> ist eine Zählschleife mit eingebauter <b>Zählvariablen</b> <i>i</i>, die nacheinander die Werte 1, 2, 3, … 10 annimmt.</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 3.3 – Der kleine Gauß</h4><p>Der Mathematiker Carl Friedrich Gauß soll als Schüler die Zahlen von 1 bis 100 in Rekordzeit addiert haben. Lass das den Computer erledigen: Berechne die Summe 1 + 2 + 3 + … + 100 und lass das Sprite das Ergebnis sagen.</p></div>
+  <div class="box tipp"><h4>🔎 Tipp</h4><p>Lege eine Variable <i>summe</i> mit dem Startwert 0 an. Erhöhe sie in der Schleife jeweils um <i>i</i>.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag mit „für“</summary><div class="blocks" data-prog="V2"></div><br><button class="btn" data-load="V2" data-into="V1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag mit eigener Zählvariable</summary><div class="blocks" data-prog="V_sum2"></div><br><button class="btn" data-load="V_sum2" data-into="V1">In den Baukasten laden</button></details>
+
+  <h2>3.5 Zufall und Eingaben – Zahlenraten</h2>
+  <div class="prose"><p>Mit <code>zufall(1, 100)</code> erzeugt der Computer eine zufällige ganze Zahl zwischen 1 und 100 (im echten Snap!: grüner Block „Zufallszahl von 1 bis 100“). Zusammen mit Variablen, Schleifen und Verzweigungen können wir jetzt ein komplettes Spiel bauen:</p></div>
+  <div class="ws" data-ws="V3"></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 3.4 – Zahlenraten verstehen und erweitern</h4>
+    <ol type="a"><li>Spiele das Spiel mehrmals. Welche Strategie braucht die wenigsten Versuche?</li><li>Welche Aufgabe hat jede der drei Variablen <i>geheim</i>, <i>versuche</i> und <i>Antwort</i>?</li><li>Erweitere das Spiel: Nach 7 Fehlversuchen ist das Spiel verloren.</li></ol>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp zu a)</h4><p>Halbiere den Bereich bei jedem Tipp: Rate zuerst 50, dann 25 oder 75 usw. Diese Strategie heißt <b>binäre Suche</b> und findet jede Zahl zwischen 1 und 100 in höchstens 7 Versuchen.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag c)</summary><div class="blocks" data-prog="V_guess7"></div><br><button class="btn" data-load="V_guess7" data-into="V3">In den Baukasten laden</button></details>
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Drehe das Spiel um: Du denkst dir eine Zahl, und der Computer rät mit der binären Suche. Du antwortest jeweils mit „größer“, „kleiner“ oder „richtig“.</p></div>
+
+  <div class="box quiz"><h4>❓ Quiz: Variablen</h4><div class="quiz-host" data-quiz="v"></div></div>
+  <div class="box gesell"><h4>🌍 Digitalisierung, Individuum und Gesellschaft: Ist der Zufall wirklich zufällig?</h4>
+    <p>Computer arbeiten streng nach Regeln – echter Zufall ist für sie schwierig. Zufallszahlen werden meist mit einer Formel berechnet, die nur zufällig <i>aussieht</i> (Pseudozufall). Für Spiele reicht das. Bei Verschlüsselung, Online-Banking oder Glücksspiel muss der Zufall jedoch so gut sein, dass niemand ihn vorhersagen kann – sonst könnten Angreifer Passwörter oder Ergebnisse erraten.</p>
+  </div>
+</section>
+
+<!-- ======================= 4 PROZEDUREN & FUNKTIONEN ======================= -->
+<section class="chap" id="prozeduren" data-nav="4 Prozeduren & Funktionen" data-sub="Eigene Blöcke, Parameter, Rückgabewerte, Rekursion">
+  <h1>4 · Prozeduren und Funktionen</h1>
+  <p class="lead">Mit eigenen Blöcken erweiterst du Snap! um neue Befehle. Das macht Programme kürzer, übersichtlicher und wiederverwendbar.</p>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Schleifen, Verzweigungen, Variablen (Kapitel 2 und 3)</p></div>
+
+  <h2>4.1 Eigene Blöcke (Prozeduren)</h2>
+  <div class="prose">
+    <p>Stell dir vor, du willst ein Bild aus vielen Quadraten zeichnen. Jedes Mal die Quadrat-Schleife neu zu bauen, ist mühsam. Stattdessen bringen wir Snap! einen neuen Befehl bei: <b>quadrat</b>. Einmal definiert, kannst du ihn so oft verwenden, wie du willst – genau wie einen eingebauten Block.</p>
+    <p>Im echten Snap! klickst du dazu mit der rechten Maustaste in den Skriptbereich und wählst „Block bauen …“ (oder du nutzt den Knopf „Neuer Block“ unten in der Palette). Es öffnet sich ein Blockeditor, in dem du festlegst, was dein Block tun soll.</p>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Prozedur</h4>
+    <p>Eine <b>Prozedur</b> (eigener Befehlsblock) fasst mehrere Anweisungen unter einem Namen zusammen. Die <b>Definition</b> legt fest, was der Block tut. Beim <b>Aufruf</b> wird die Definition ausgeführt.</p>
+    <p>Vorteile: Programme werden <b>kürzer</b> und <b>übersichtlicher</b>, Teile lassen sich <b>wiederverwenden</b>, und man kann ein großes Problem in kleine Teilprobleme zerlegen (<b>Modularisierung</b>).</p>
+  </div>
+  <h3>Parameter</h3>
+  <div class="prose"><p>Damit der Block <i>quadrat</i> verschieden große Quadrate zeichnen kann, bekommt er eine Eingabe: die <b>Seitenlänge</b>. Solche Eingaben heißen <b>Parameter</b>. In der Definition steht der Parameter <i>seite</i> als Platzhalter; beim Aufruf <span class="blocks inline" data-b="call:quadrat;40"></span> wird für <i>seite</i> der Wert 40 eingesetzt.</p></div>
+  <div class="box merk"><h4>💡 Merke: Parameter</h4><p>Ein <b>Parameter</b> ist eine Eingabe eines Blocks. In der Definition ist er ein Platzhalter (eine Variable, die nur innerhalb des Blocks gilt). Beim Aufruf wird ein konkreter Wert übergeben.</p></div>
+
+  <div class="ws" data-ws="P1"></div>
+  <div class="box tipp"><h4>🔎 Tipp: Eigene Blöcke im Baukasten</h4><p>Mit <b>+ Neuer Block</b> im Skriptbereich legst du einen eigenen Block an. Gib den Namen und die Parameter (durch Komma getrennt) ein. Danach erscheint die Definition im Skriptbereich, und der neue Block steht in der Palette unter „Eigene Blöcke“.</p></div>
+
+  <div class="box aufgabe"><h4>✏️ Aufgabe 4.1 – Vielecke und Häuser</h4>
+    <ol type="a"><li>Erstelle einen Block <b>vieleck</b> mit den Parametern <i>ecken</i> und <i>länge</i>. Zeichne damit alle Vielecke vom Dreieck bis zum Zehneck übereinander.</li>
+    <li>Erstelle einen Block <b>haus</b> mit dem Parameter <i>größe</i>, der ein Quadrat mit einem dreieckigen Dach zeichnet. Zeichne damit eine Häuserreihe.</li></ol>
+  </div>
+  <details class="sol"><summary>Lösungsvorschlag a)</summary><div class="blocks" data-prog="P_poly"></div><br><button class="btn" data-load="P_poly" data-into="P1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b)</summary><div class="blocks" data-prog="P_house"></div><br><button class="btn" data-load="P_house" data-into="P1">In den Baukasten laden</button></details>
+
+  <h2>4.2 Funktionen – Blöcke, die etwas berichten</h2>
+  <div class="prose">
+    <p>Manche Blöcke führen keine Aktion aus, sondern berechnen einen <b>Wert</b>, zum Beispiel „Zufallszahl von 1 bis 10“. Solche Blöcke heißen in Snap! <b>Reporter</b> (Funktionen) und haben eine runde Form. Mit dem Block <span class="blocks inline" data-b="report:x * x"></span> gibt eine Funktion ihr Ergebnis zurück.</p>
+    <p>Die <b>Funktionsmaschine</b> zeigt das Prinzip: Eingabe rein, Ergebnis raus.</p>
+  </div>
+  <div class="widget"><h4>⚙️ Funktionsmaschine</h4>
+    <div class="machine"><input type="number" id="mx" value="5" aria-label="Eingabe"><span>➜</span><div class="mbox" id="mbox"><select id="mfn" style="font:inherit;border:0;border-radius:6px;padding:2px 4px"></select></div><span>➜</span><div class="out" id="mout">?</div><button class="btn pri" id="mgo">Berechnen</button></div>
+    <div id="mguess" style="margin-top:12px;display:none">🕵️ <b>Rätselmaschine:</b> Probiere verschiedene Eingaben und finde die Regel heraus! &nbsp; f(x) = <input id="mg" placeholder="z. B. x + 1" style="width:130px;padding:4px 6px;border-radius:6px;border:1px solid #c9cfdb;font-family:monospace"> <button class="btn" id="mgc">Prüfen</button> <span id="mgr" class="feedback"></span></div>
+  </div>
+  <div class="box merk"><h4>💡 Merke: Funktion</h4><p>Eine <b>Funktion</b> (Reporter) ist ein eigener Block, der aus seinen Eingaben einen Wert berechnet und mit <b>berichte</b> zurückgibt. Sobald „berichte“ ausgeführt wird, ist die Funktion beendet. Funktionen verwendet man dort, wo ein Wert gebraucht wird – in einem Eingabefeld.</p></div>
+
+  <div class="ws" data-ws="P2"></div>
+
+  <div class="box aufgabe"><h4>✏️ Aufgabe 4.2 – Eigene Funktionen</h4>
+    <ol type="a"><li>Schreibe eine Funktion <b>mittelwert(a, b)</b>, die den Durchschnitt zweier Zahlen berichtet.</li>
+    <li>Schreibe eine Funktion <b>istPrim(n)</b>, die <i>wahr</i> berichtet, wenn n eine Primzahl ist, sonst <i>falsch</i>. Lass damit alle Primzahlen bis 30 ausgeben.</li></ol>
+  </div>
+  <div class="box tipp"><h4>🔎 Tipp zu b)</h4><p>n ist keine Primzahl, wenn n &lt; 2 ist oder wenn es einen Teiler t gibt (mit 2 ≤ t und t · t ≤ n), für den <code>n mod t = 0</code> gilt. Sobald du einen Teiler findest, kannst du sofort <i>falsch</i> berichten.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag a)</summary><div class="blocks" data-prog="P_mean"></div><br><button class="btn" data-load="P_mean" data-into="P2">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b)</summary><div class="blocks" data-prog="P_prime"></div><br><button class="btn" data-load="P_prime" data-into="P2">In den Baukasten laden</button></details>
+
+  <h2>4.3 Rekursion – ein Block ruft sich selbst auf</h2>
+  <div class="prose"><p>Die Funktion <i>fakultät</i> im Baukasten oben ruft sich selbst auf: 4! = 4 · 3!, und 3! = 3 · 2! usw., bis 1! = 1. Das nennt man <b>Rekursion</b>. Mit Rekursion lassen sich auch faszinierende Bilder zeichnen, zum Beispiel ein Baum, dessen Äste wieder kleine Bäume sind:</p></div>
+  <div class="solrow"><div class="blocks" data-prog="P_tree"></div></div>
+  <button class="btn" data-load="P_tree" data-into="P1">Baum in den Baukasten laden</button>
+  <div class="box merk"><h4>💡 Merke: Rekursion</h4><p>Ein Block ist <b>rekursiv</b>, wenn er sich selbst aufruft. Wichtig ist eine <b>Abbruchbedingung</b> (beim Baum: länge &gt; 8), damit die Rekursion irgendwann endet.</p></div>
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Verändere den Baum: andere Winkel, ein anderer Verkleinerungsfaktor, drei statt zwei Äste, Farben je nach Astlänge. Oder zeichne eine Koch-Schneeflocke!</p></div>
+
+  <div class="box quiz"><h4>❓ Lückentext</h4>
+    <div class="cloze">Die Eingaben eines eigenen Blocks heißen [[Parameter|Eingaben]]. Ein eigener Block, der mit „berichte“ einen Wert zurückgibt, heißt [[Funktion|Reporter]]. Ruft sich ein Block selbst auf, spricht man von [[Rekursion]]. Damit sie nicht endlos läuft, braucht man eine [[Abbruchbedingung]].</div>
+  </div>
+  <div class="box quiz"><h4>❓ Quiz: Prozeduren und Funktionen</h4><div class="quiz-host" data-quiz="p"></div></div>
+</section>
+
+<!-- ======================= 5 LISTEN ======================= -->
+<section class="chap" id="listen" data-nav="5 Listen" data-sub="Viele Werte speichern, durchlaufen, suchen">
+  <h1>5 · Listen</h1>
+  <p class="lead">Eine Variable speichert einen Wert. Was aber, wenn du alle Noten einer Klasse, eine Einkaufsliste oder einen Highscore speichern willst? Dafür gibt es Listen.</p>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Variablen, Schleifen (für), Verzweigungen</p></div>
+
+  <h2>5.1 Was ist eine Liste?</h2>
+  <div class="prose"><p>Eine <b>Liste</b> ist eine Variable, die viele Werte in einer festen Reihenfolge speichert. Jeder Wert hat eine Position, den <b>Index</b>. In Snap! beginnt die Zählung bei <b>1</b>.</p></div>
+  <div class="box merk"><h4>💡 Merke: Liste</h4>
+    <p>Eine <b>Liste</b> ist eine geordnete Sammlung von Elementen. Über den <b>Index</b> (die Position) greift man auf ein einzelnes Element zu. Das erste Element hat in Snap! den Index 1.</p>
+    <table class="t">
+      <tr><th>Block</th><th>Bedeutung</th></tr>
+      <tr><td><span class="blocks inline" data-b="listNew:liste"></span></td><td>legt eine leere Liste an</td></tr>
+      <tr><td><span class="blocks inline" data-b="listAdd:Apfel;liste"></span></td><td>hängt ein Element hinten an</td></tr>
+      <tr><td><span class="blocks inline" data-b="listDel:2;liste"></span></td><td>entfernt das Element an Position 2</td></tr>
+      <tr><td><span class="blocks inline" data-b="listRep:1;liste;Birne"></span></td><td>ersetzt das Element an Position 1</td></tr>
+      <tr><td><code>element(2, liste)</code></td><td>liefert das Element an Position 2</td></tr>
+      <tr><td><code>länge(liste)</code></td><td>liefert die Anzahl der Elemente</td></tr>
+      <tr><td><code>liste(3, 1, 4)</code></td><td>erzeugt eine Liste mit diesen Elementen</td></tr>
+    </table>
+  </div>
+
+  <div class="widget"><h4>🧪 Listen-Labor</h4>
+    <div class="lp">
+      <div><div id="lpview"></div></div>
+      <div class="ctrls">
+        <div><input id="lpv" value="Apfel" aria-label="Wert"><button class="btn" id="lpadd">hinzufügen</button></div>
+        <div>Position <input id="lpi" type="number" value="1" min="1" style="width:60px" aria-label="Position"><button class="btn" id="lpget">Element?</button><button class="btn" id="lpdel">löschen</button><button class="btn" id="lprep">ersetzen</button></div>
+        <div><button class="btn" id="lplen">Länge?</button><button class="btn" id="lpclr">leeren</button></div>
+        <div class="lout" id="lpout">Probiere die Knöpfe aus!</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>5.2 Listen durchlaufen</h2>
+  <div class="prose"><p>Mit dem Block <b>für jedes … in …</b> kannst du alle Elemente einer Liste nacheinander bearbeiten. Die Variable (hier <i>note</i>) enthält bei jedem Durchlauf das nächste Element. So berechnen wir den Notendurchschnitt:</p></div>
+  <div class="ws" data-ws="L1"></div>
+  <div class="box tipp"><h4>🔎 Tipp</h4><p>Statt vieler „füge … hinzu“-Blöcke kannst du eine Liste auch direkt anlegen: <span class="blocks inline" data-b="set:noten;liste(2, 3, 1, 4, 2, 3)"></span></p></div>
+
+  <h2>5.3 Suchen in Listen – das Maximum</h2>
+  <div class="box quiz"><h4>❓ Puzzle: Algorithmus „Maximum suchen“</h4><p>Wie findest du die größte Zahl in einer Liste? Ordne die Schritte.</p><div class="parsons-host" data-parsons="max"></div></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 5.1 – Maximum, Minimum, Zählen</h4>
+    <ol type="a"><li>Setze den Algorithmus aus dem Puzzle um: Finde die größte Zahl in <code>liste(12, 45, 7, 88, 23, 61)</code>.</li>
+    <li>Finde in der Notenliste die beste (kleinste) Note und zähle, wie viele Noten 1 oder 2 sind.</li></ol>
+  </div>
+  <details class="sol"><summary>Lösungsvorschlag a)</summary><div class="blocks" data-prog="L2"></div><br><button class="btn" data-load="L2" data-into="L1">In den Baukasten laden</button></details>
+  <details class="sol"><summary>Lösungsvorschlag b)</summary><div class="blocks" data-prog="L_min"></div><br><button class="btn" data-load="L_min" data-into="L1">In den Baukasten laden</button></details>
+
+  <h2>5.4 Listen mit Eingaben füllen</h2>
+  <div class="box aufgabe"><h4>✏️ Aufgabe 5.2 – Einkaufsliste</h4><p>Das Sprite fragt so lange nach Dingen für die Einkaufsliste, bis „fertig“ eingegeben wird. Jede Eingabe kommt in die Liste. Am Ende sagt das Sprite, wie viele Dinge auf der Liste stehen.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="L3"></div><br><button class="btn" data-load="L3" data-into="L1">In den Baukasten laden</button></details>
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Erweitere die Einkaufsliste: Gibt man ein Ding ein, das schon auf der Liste steht, sagt das Sprite „Steht schon drauf!“ und fügt es nicht noch einmal hinzu. Tipp: <code>enthält(liste, Antwort)</code>.</p></div>
+
+  <div class="box quiz"><h4>❓ Lückentext</h4>
+    <div class="cloze">Das erste Element einer Liste hat in Snap! den Index [[1]]. Die Liste liste(3, 6, 9, 12) hat die Länge [[4]]. element(2, liste(3, 6, 9, 12)) ergibt [[6]]. Fügt man mit „füge 15 zu … hinzu“ ein Element an, steht es an Position [[5]].</div>
+  </div>
+  <div class="box quiz"><h4>❓ Quiz: Listen</h4><div class="quiz-host" data-quiz="l"></div></div>
+  <div class="box gesell"><h4>🌍 Digitalisierung, Individuum und Gesellschaft: Daten sammeln</h4>
+    <p>Apps und Webseiten speichern riesige Listen: welche Videos du angesehen hast, wo du warst, was du gekauft hast. Algorithmen durchsuchen diese Listen, erkennen Muster und berechnen daraus Vorhersagen und Werbung. Die Datenschutz-Grundverordnung (DSGVO) gibt dir das Recht zu erfahren, welche Daten über dich gespeichert sind, und sie löschen zu lassen. Überlege: Welche Daten gibst du jeden Tag preis?</p>
+  </div>
+</section>
+
+<!-- ======================= 6 PROJEKTE ======================= -->
+<section class="chap" id="projekte" data-nav="6 Projekte & Übungen" data-sub="Freier Baukasten, 6 Projekte, Abschlusstest">
+  <h1>6 · Projekte und Übungen</h1>
+  <p class="lead">Jetzt kannst du alles kombinieren! Wähle ein Projekt, baue es im freien Baukasten und vergleiche dann mit dem Lösungsvorschlag. Die Sterne zeigen den Schwierigkeitsgrad.</p>
+
+  <h2>Freier Baukasten</h2>
+  <p class="prose">Hier stehen dir alle Blöcke aus dem Kurs zur Verfügung – auch eigene Blöcke und Listen.</p>
+  <div class="ws" data-ws="FREE"></div>
+
+  <h2>Projekte</h2>
+
+  <div class="projhead"><h3>Projekt A – Das Haus vom Nikolaus</h3><span class="stars">★☆☆</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Sequenz, Koordinaten, „gehe zu“, Stift</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Zeichne das „Haus vom Nikolaus“ in einem Zug, also ohne den Stift abzusetzen und ohne eine Linie doppelt zu zeichnen. Das Haus besteht aus einem Quadrat mit beiden Diagonalen und einem Dach.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PA"></div><br><button class="btn" data-load="PA" data-into="FREE">In den freien Baukasten laden</button></details>
+
+  <div class="projhead"><h3>Projekt B – Sternenhimmel</h3><span class="stars">★★☆</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Schleifen, eigene Blöcke mit Parametern, Zufall</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Erstelle einen Block <b>stern(größe)</b>, der einen fünfzackigen Stern zeichnet. Zeichne dann 30 Sterne in zufälliger Größe, Farbe und Position.</p></div>
+  <div class="box tipp"><h4>🔎 Tipp</h4><p>Ein fünfzackiger Stern entsteht, wenn sich das Sprite fünfmal um 144° dreht. Vor dem Springen an eine neue Position den Stift anheben!</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PB"></div><br><button class="btn" data-load="PB" data-into="FREE">In den freien Baukasten laden</button></details>
+
+  <div class="projhead"><h3>Projekt C – Einmaleins-Trainer</h3><span class="stars">★★☆</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Variablen, Zufall, frage/Antwort, falls … sonst</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Das Sprite stellt 5 zufällige Einmaleins-Aufgaben, prüft die Antworten und zählt die richtigen. Am Ende gibt es eine Rückmeldung wie „Du hast 4 von 5 richtig!“.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PC"></div><br><button class="btn" data-load="PC" data-into="FREE">In den freien Baukasten laden</button></details>
+  <div class="box idee"><h4>🚀 Idee für Schnelle</h4><p>Merke dir falsch beantwortete Aufgaben in einer Liste und stelle sie am Ende noch einmal.</p></div>
+
+  <div class="projhead"><h3>Projekt D – Fibonacci-Folge</h3><span class="stars">★★☆</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Listen, element, länge, Schleifen</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Die Fibonacci-Folge beginnt mit 1, 1. Jede weitere Zahl ist die Summe der beiden vorherigen: 1, 1, 2, 3, 5, 8, 13, … Erzeuge eine Liste mit den ersten 15 Fibonacci-Zahlen.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PD"></div><br><button class="btn" data-load="PD" data-into="FREE">In den freien Baukasten laden</button></details>
+
+  <div class="projhead"><h3>Projekt E – Lineare Suche</h3><span class="stars">★★☆</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Listen, für-Schleife, Verzweigungen</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Gegeben ist eine Namensliste. Das Sprite fragt nach einem Namen und durchsucht die Liste Element für Element. Es sagt, an welcher Position der Name steht – oder dass er nicht in der Liste ist. Nutze dabei <i>nicht</i> den Block „enthält“.</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PE"></div><br><button class="btn" data-load="PE" data-into="FREE">In den freien Baukasten laden</button></details>
+
+  <div class="projhead"><h3>Projekt F – Sortieren mit Bubblesort</h3><span class="stars">★★★</span></div>
+  <div class="box vork"><h4>📚 Vorkenntnisse</h4><p>Listen, verschachtelte Schleifen, Variablen, Verzweigungen</p></div>
+  <div class="box aufgabe"><h4>✏️ Aufgabe</h4><p>Sortiere eine Zahlenliste aufsteigend. Beim <b>Bubblesort</b> geht man die Liste immer wieder durch und vertauscht zwei benachbarte Elemente, wenn sie in der falschen Reihenfolge stehen. So „blubbern“ die großen Zahlen nach hinten.</p></div>
+  <div class="box tipp"><h4>🔎 Tipp: Zwei Werte tauschen</h4><p>Um zwei Elemente zu tauschen, brauchst du eine Hilfsvariable <i>temp</i>: Merke dir das erste Element in <i>temp</i>, überschreibe das erste mit dem zweiten und das zweite mit <i>temp</i>. Lass das Programm in Zeitlupe laufen und beobachte die Liste!</p></div>
+  <details class="sol"><summary>Lösungsvorschlag</summary><div class="blocks" data-prog="PF"></div><br><button class="btn" data-load="PF" data-into="FREE">In den freien Baukasten laden</button></details>
+  <div class="box gesell"><h4>🌍 Digitalisierung, Individuum und Gesellschaft: Wer sortiert, entscheidet</h4><p>Suchmaschinen, soziale Netzwerke und Online-Shops sortieren ständig – nach Relevanz, Beliebtheit oder Gewinn. Was oben steht, wird gesehen; was weit unten steht, kaum. Wer das Sortierkriterium festlegt, beeinflusst also, was Millionen Menschen wahrnehmen.</p></div>
+
+  <h2>Abschlusstest</h2>
+  <div class="box quiz"><h4>❓ Abschlusstest: Alles aus dem Kurs</h4><div class="quiz-host" data-quiz="final"></div></div>
+
+  <h2>Weiter im echten Snap!</h2>
+  <div class="prose"><p>Baue deine Lieblingsprogramme im echten Snap! nach. Dort kannst du sie speichern („Datei → Speichern“ oder als XML exportieren), mit Klängen und Kostümen ausschmücken und mit anderen teilen.</p></div>
+  <button class="btn pri" data-snapframe="sf6">Snap! hier einblenden</button> <a class="btn" href="https://snap.berkeley.edu/snap/snap.html" target="_blank" rel="noopener">Snap! in neuem Tab öffnen</a>
+  <div id="sf6"></div>
+</section>
+</main>
+<footer>Inhaltliche Struktur und Kastensystem angelehnt an den Lehrgang „Algorithmen“ von Jochen Schmitt (<a href="https://info-am-gym.de/algo" target="_blank" rel="noopener">info-am-gym.de/algo</a>). Snap! ist ein Projekt der University of California, Berkeley (<a href="https://snap.berkeley.edu" target="_blank" rel="noopener">snap.berkeley.edu</a>). Der Baukasten auf dieser Seite ist eine vereinfachte Nachbildung für den Unterricht.</footer>
+
+<script>
+'use strict';
+/* ================= Hilfsfunktionen ================= */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const store={get(k,d){try{const v=localStorage.getItem('snapkurs:'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem('snapkurs:'+k,JSON.stringify(v));}catch(e){}},
+  del(k){try{localStorage.removeItem('snapkurs:'+k);}catch(e){}}};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ================= Werte & Ausdrücke ================= */
+class MissingVar extends Error{constructor(n){super(`Die Variable „${n}“ gibt es (noch) nicht. Lege sie zuerst mit „setze … auf …“ an.`);this.varName=n;}}
+class StopRun extends Error{constructor(){super('Programm abgebrochen.');}}
+const NUMRE=/^\s*-?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?\s*$/i;
+function isNumLike(v){return (typeof v==='number'&&!isNaN(v))||(typeof v==='string'&&NUMRE.test(v));}
+function num(v){
+  if(typeof v==='number'){if(isNaN(v))throw new Error('Das Ergebnis ist keine Zahl.');return v;}
+  if(typeof v==='string'&&NUMRE.test(v))return Number(v);
+  if(typeof v==='boolean')throw new Error(`„${fmt(v)}“ ist keine Zahl.`);
+  if(Array.isArray(v))throw new Error('Eine Liste ist keine Zahl.');
+  throw new Error(`„${v}“ ist keine Zahl.`);
+}
+function fmt(v){
+  if(typeof v==='boolean')return v?'wahr':'falsch';
+  if(typeof v==='number'){if(!isFinite(v))return v>0?'∞':'-∞';return String(Number(v.toFixed(10)));}
+  if(Array.isArray(v))return '['+v.map(fmt).join(', ')+']';
+  return String(v??'');
+}
+function truthy(v){
+  if(typeof v==='boolean')return v;
+  if(v==='wahr'||v==='true')return true;
+  if(v==='falsch'||v==='false')return false;
+  throw new Error(`Die Bedingung ergibt keinen Wahrheitswert, sondern „${fmt(v)}“. Verwende einen Vergleich wie x > 5.`);
+}
+function eq(a,b){
+  if(Array.isArray(a)||Array.isArray(b))return JSON.stringify(a)===JSON.stringify(b);
+  if(isNumLike(a)&&isNumLike(b))return Number(a)===Number(b);
+  return fmt(a).toLowerCase()===fmt(b).toLowerCase();
+}
+function asList(L){if(!Array.isArray(L))throw new Error(`„${fmt(L)}“ ist keine Liste.`);return L;}
+const BUILTIN={
+  zufall:(a,b)=>{a=num(a);b=num(b);if(a>b)[a,b]=[b,a];return Number.isInteger(a)&&Number.isInteger(b)?a+Math.floor(Math.random()*(b-a+1)):a+Math.random()*(b-a);},
+  'länge':x=>Array.isArray(x)?x.length:fmt(x).length,
+  element:(i,L)=>{L=asList(L);i=num(i);if(!Number.isInteger(i)||i<1||i>L.length)throw new Error(`Element ${fmt(i)} gibt es nicht – die Liste hat ${L.length} Element(e).`);return L[i-1];},
+  'enthält':(L,x)=>asList(L).some(v=>eq(v,x)),
+  liste:(...a)=>a,
+  verbinde:(...a)=>a.map(fmt).join(''),
+  buchstabe:(i,s)=>fmt(s).charAt(num(i)-1),
+  wurzel:x=>Math.sqrt(num(x)),
+  runde:x=>Math.round(num(x)),
+  abrunden:x=>Math.floor(num(x)),
+  aufrunden:x=>Math.ceil(num(x)),
+  betrag:x=>Math.abs(num(x)),
+  max:(...a)=>Math.max(...a.map(num)),
+  min:(...a)=>Math.min(...a.map(num)),
+};
+BUILTIN.laenge=BUILTIN['länge'];BUILTIN.enthaelt=BUILTIN['enthält'];BUILTIN.abs=BUILTIN.betrag;
+
+const TOKRE=/\s+|(\d+(?:\.\d+)?|\.\d+)|"([^"]*)"|„([^“”"]*)[“”"]|'([^']*)'|([A-Za-zÄÖÜäöüß_][A-Za-zÄÖÜäöüß_0-9]*)|(<=|>=|!=|==|≠|≤|≥|[-+*/%()<>=,^·×:])/y;
+function tokenize(s){
+  const t=[];let i=0;
+  while(i<s.length){TOKRE.lastIndex=i;const m=TOKRE.exec(s);if(!m||m[0]==='')throw new Error(`unbekanntes Zeichen „${s[i]}“`);i=TOKRE.lastIndex;
+    if(m[1]!=null)t.push({k:'num',v:parseFloat(m[1])});
+    else if(m[2]!=null)t.push({k:'str',v:m[2]});else if(m[3]!=null)t.push({k:'str',v:m[3]});else if(m[4]!=null)t.push({k:'str',v:m[4]});
+    else if(m[5]!=null)t.push({k:'id',v:m[5]});else if(m[6]!=null)t.push({k:'op',v:m[6]});}
+  return t;
+}
+const PCACHE=new Map();
+function parseExpr(src){
+  if(PCACHE.has(src))return PCACHE.get(src);
+  const s=src.trim();
+  if(s===''){const r={k:'str',v:''};PCACHE.set(src,r);return r;}
+  const t=tokenize(s);let p=0;
+  const isOp=v=>t[p]&&t[p].k==='op'&&t[p].v===v;
+  const isKw=(...w)=>t[p]&&t[p].k==='id'&&w.includes(t[p].v.toLowerCase());
+  const expect=v=>{if(!isOp(v))throw new Error(`„${v}“ erwartet`);p++;};
+  const CMP=['=','==','!=','≠','<','>','<=','>=','≤','≥'];
+  function or(){let l=and();while(isKw('oder','or')){p++;l={k:'or',l,r:and()};}return l;}
+  function and(){let l=not();while(isKw('und','and')){p++;l={k:'and',l,r:not()};}return l;}
+  function not(){if(isKw('nicht','not')){p++;return {k:'not',x:not()};}return cmp();}
+  function cmp(){let l=add();if(t[p]&&t[p].k==='op'&&CMP.includes(t[p].v)){const op=t[p++].v;l={k:'cmp',op,l,r:add()};}return l;}
+  function add(){let l=mul();while(isOp('+')||isOp('-')){const op=t[p++].v;l={k:'bin',op,l,r:mul()};}return l;}
+  function mul(){let l=pow();while(isOp('*')||isOp('/')||isOp('%')||isOp('·')||isOp('×')||isOp(':')||isKw('mod')){let op=t[p++].v;if(op==='·'||op==='×')op='*';if(op===':')op='/';if(op.toLowerCase()==='mod')op='%';l={k:'bin',op,l,r:pow()};}return l;}
+  function pow(){const b=unary();if(isOp('^')){p++;return {k:'bin',op:'^',l:b,r:pow()};}return b;}
+  function unary(){if(isOp('-')){p++;return {k:'neg',x:unary()};}if(isOp('+')){p++;return unary();}return prim();}
+  function prim(){
+    const tk=t[p];if(!tk)throw new Error('Ausdruck ist unvollständig');
+    if(tk.k==='num'){p++;return {k:'num',v:tk.v};}
+    if(tk.k==='str'){p++;return {k:'str',v:tk.v};}
+    if(tk.k==='op'&&tk.v==='('){p++;const e=or();expect(')');return e;}
+    if(tk.k==='id'){
+      const lw=tk.v.toLowerCase();
+      if(lw==='wahr'||lw==='true'){p++;return {k:'bool',v:true};}
+      if(lw==='falsch'||lw==='false'){p++;return {k:'bool',v:false};}
+      if(['und','oder','nicht','mod','and','or','not'].includes(lw))throw new Error(`„${tk.v}“ an falscher Stelle`);
+      p++;
+      if(isOp('(')){p++;const args=[];if(!isOp(')')){args.push(or());while(isOp(',')){p++;args.push(or());}}expect(')');return {k:'call',name:tk.v,args};}
+      return {k:'var',name:tk.v};
+    }
+    throw new Error(`„${tk.v}“ an falscher Stelle`);
+  }
+  const ast=or();
+  if(p<t.length)throw new Error(`unerwartetes „${t[p].v}“`);
+  PCACHE.set(src,ast);return ast;
+}
+function ev(n,ctx){
+  switch(n.k){
+    case 'num':case 'str':case 'bool':return n.v;
+    case 'var':return ctx.get(n.name);
+    case 'neg':return -num(ev(n.x,ctx));
+    case 'not':return !truthy(ev(n.x,ctx));
+    case 'and':return truthy(ev(n.l,ctx))&&truthy(ev(n.r,ctx));
+    case 'or':return truthy(ev(n.l,ctx))||truthy(ev(n.r,ctx));
+    case 'cmp':{const a=ev(n.l,ctx),b=ev(n.r,ctx);
+      switch(n.op){case '=':case '==':return eq(a,b);case '!=':case '≠':return !eq(a,b);}
+      let x,y;if(isNumLike(a)&&isNumLike(b)){x=Number(a);y=Number(b);}else{x=fmt(a).toLowerCase();y=fmt(b).toLowerCase();}
+      switch(n.op){case '<':return x<y;case '>':return x>y;case '<=':case '≤':return x<=y;default:return x>=y;}}
+    case 'bin':{const a=ev(n.l,ctx),b=ev(n.r,ctx);
+      if(n.op==='+'){if(isNumLike(a)&&isNumLike(b))return Number(a)+Number(b);return fmt(a)+fmt(b);}
+      const x=num(a),y=num(b);
+      switch(n.op){case '-':return x-y;case '*':return x*y;case '/':return x/y;case '%':return ((x%y)+y)%y;case '^':return Math.pow(x,y);}
+      break;}
+    case 'call':{const args=n.args.map(a=>ev(a,ctx));return ctx.call(n.name,args);}
+  }
+  throw new Error('Unbekannter Ausdruck');
+}
+
+/* ================= Blockdefinitionen ================= */
+const COLORS={schwarz:'#222',rot:'#e53935',orange:'#f57c00',gelb:'#f2b705',grün:'#2e9e3e',blau:'#1e63d6',lila:'#8e44ad',pink:'#e91e8c',braun:'#795548',grau:'#888'};
+const COLOR_OPTS=[...Object.keys(COLORS),'zufällig'];
+const SPEC={
+  move:{cat:'motion',p:['gehe',0,'Schritte'],d:['10']},
+  turnR:{cat:'motion',p:['drehe ↻',0,'Grad'],d:['15']},
+  turnL:{cat:'motion',p:['drehe ↺',0,'Grad'],d:['15']},
+  point:{cat:'motion',p:['zeige Richtung',0],d:['90']},
+  goto:{cat:'motion',p:['gehe zu x:',0,'y:',1],d:['0','0']},
+  say:{cat:'looks',p:['sage',0],d:['Hallo!']},
+  clear:{cat:'pen',p:['wische'],d:[]},
+  down:{cat:'pen',p:['Stift runter'],d:[]},
+  up:{cat:'pen',p:['Stift hoch'],d:[]},
+  color:{cat:'pen',p:['setze Stiftfarbe auf',{i:0,sel:COLOR_OPTS}],d:['blau']},
+  width:{cat:'pen',p:['setze Stiftdicke auf',0],d:['3']},
+  wait:{cat:'control',p:['warte',0,'Sek.'],d:['1']},
+  repeat:{cat:'control',p:['wiederhole',0,'mal'],d:['4'],c:1},
+  until:{cat:'control',p:['wiederhole bis',{i:0,cond:1}],d:['xposition > 100'],c:1},
+  for:{cat:'control',p:['für',{i:0,v:1},'=',1,'bis',2],d:['i','1','10'],c:1},
+  if:{cat:'control',p:['falls',{i:0,cond:1}],d:['Antwort > 0'],c:1},
+  ifelse:{cat:'control',p:['falls',{i:0,cond:1}],d:['Antwort > 0'],c:2},
+  report:{cat:'control',p:['berichte',0],d:['0']},
+  ask:{cat:'sensing',p:['frage',0,'und warte'],d:['Wie heißt du?']},
+  set:{cat:'variables',p:['setze',{i:0,v:1},'auf',1],d:['x','0']},
+  change:{cat:'variables',p:['ändere',{i:0,v:1},'um',1],d:['x','1']},
+  listNew:{cat:'lists',p:['setze',{i:0,v:1},'auf leere Liste'],d:['liste']},
+  listAdd:{cat:'lists',p:['füge',0,'zu',{i:1,v:1},'hinzu'],d:['Wert','liste']},
+  listDel:{cat:'lists',p:['lösche',0,'aus',{i:1,v:1}],d:['1','liste']},
+  listRep:{cat:'lists',p:['ersetze Element',0,'in',{i:1,v:1},'durch',2],d:['1','liste','0']},
+  forEach:{cat:'lists',p:['für jedes',{i:0,v:1},'in',{i:1,v:1}],d:['element','liste'],c:1},
+  /* nur zur Anzeige */
+  hat:{cat:'control',p:['Wenn ⚑ angeklickt'],d:[],hat:1},
+  op:{cat:'operators',p:[0],d:['']},
+  forhead:{cat:'control',p:['für',{i:0,v:1},'=',1,'bis',2],d:['i','1','10']},
+};
+const CATS={motion:'Bewegung',looks:'Aussehen',pen:'Stift',control:'Steuerung',sensing:'Fühlen',variables:'Variablen',lists:'Listen',custom:'Eigene Blöcke'};
+let UID=1;
+function clone(list){return (list||[]).map(x=>{const o={id:UID++,t:x.t,a:[...(x.a||[])]};if(x.name)o.name=x.name;if(x.body)o.body=clone(x.body);if(x.else)o.else=clone(x.else);return o;});}
+function cloneProc(p){return {name:p.name,params:[...p.params],kind:p.kind,body:clone(p.body)};}
+function strip(list){return list.map(x=>{const o={t:x.t,a:x.a};if(x.name)o.name=x.name;if(x.body)o.body=strip(x.body);if(x.else)o.else=strip(x.else);return o;});}
+
+/* ---- Rendering ---- */
+function blockSpec(blk,ctx){
+  if(blk.t!=='call')return SPEC[blk.t];
+  const pr=(ctx.procs||[]).find(p=>p.name===blk.name);
+  const params=pr?pr.params:blk.a.map((_,i)=>'#'+(i+1));
+  const p=[blk.name];params.forEach((n,i)=>p.push({i,ph:n}));
+  return {cat:'custom',p};
+}
+function mkSlot(blk,o,ctx){
+  const cls='slot'+(o.cond?' cond':'')+(o.v?' var':'');
+  const val=blk.a[o.i]??'';
+  if(!ctx.ws){return el('span',cls,val===''?'\u00a0':val);}
+  if(o.sel){const s=el('select',cls);o.sel.forEach(op=>{const x=el('option',null,op);x.value=op;s.appendChild(x);});s.value=val;
+    s.onchange=()=>{blk.a[o.i]=s.value;ctx.ws.changed();};s.onclick=e=>e.stopPropagation();return s;}
+  const inp=el('input',cls);inp.value=val;inp.spellcheck=false;inp.autocomplete='off';if(o.ph)inp.placeholder=o.ph;
+  const fit=()=>{inp.style.width=Math.max(3,[...(inp.value||o.ph||'')].length+1.5)+'ch';};fit();
+  inp.oninput=()=>{blk.a[o.i]=inp.value;fit();ctx.ws.changed();};
+  inp.onclick=e=>e.stopPropagation();
+  inp.onkeydown=e=>{if(e.key==='Enter')inp.blur();};
+  return inp;
+}
+function mkCtl(list,i,ws){
+  const c=el('span','ctl');
+  [['▲','nach oben','up'],['▼','nach unten','down'],['⧉','verdoppeln','dup'],['✕','löschen','del']].forEach(([s,t,a])=>{
+    const bt=el('button',null,s);bt.title=t;bt.type='button';bt.setAttribute('aria-label',t);
+    bt.onclick=e=>{e.stopPropagation();ws.op(a,list,i);};c.appendChild(bt);});
+  return c;
+}
+function mkBlock(blk,list,i,ctx){
+  const sp=blockSpec(blk,ctx);if(!sp)return el('div','blk','? '+blk.t);
+  const w=el('div','blk c-'+sp.cat+(sp.c?' cb':''));w.dataset.id=blk.id;
+  const row=el('div','row'+(sp.hat?' hat':''));
+  sp.p.forEach(part=>{
+    if(typeof part==='string'){const l=el('span','lbl');if(part.includes('⚑')){l.innerHTML=esc(part).replace('⚑','<span class="flag">⚑</span>');}else l.textContent=part;row.appendChild(l);return;}
+    const o=typeof part==='number'?{i:part}:part;row.appendChild(mkSlot(blk,o,ctx));
+  });
+  if(ctx.ws)row.appendChild(mkCtl(list,i,ctx.ws));
+  w.appendChild(row);
+  if(sp.c){w.appendChild(mkStack(blk.body,ctx,true));if(sp.c===2){w.appendChild(el('div','row mid','sonst'));w.appendChild(mkStack(blk.else,ctx,true));}w.appendChild(el('div','foot'));}
+  return w;
+}
+function mkStack(list,ctx,isMouth){
+  const s=el('div',isMouth?'mouth':'stack');
+  if(ctx.ws){const ws=ctx.ws;ws.mouths.push({list,el:s});if(list===ws.target)s.classList.add('target');
+    s.addEventListener('click',e=>{if(e.target===s||e.target.classList.contains('ph')){e.stopPropagation();ws.setTarget(list);}});
+    if(!list.length)s.appendChild(el('div','ph',isMouth?'leer – anklicken, dann Block wählen':'Hier klicken und dann einen Block in der Palette anklicken'));}
+  list.forEach((b,i)=>s.appendChild(mkBlock(b,list,i,ctx)));
+  return s;
+}
+function renderProgram(host,prog,ctx,opts={}){
+  const procs=ctx.procs||[];
+  procs.forEach(p=>{
+    const d=el('div','blk cb c-custom procdef');
+    const hat=el('div','row hat');
+    hat.appendChild(el('span','lbl',p.kind==='rep'?'Funktion':'Block'));
+    hat.appendChild(el('span','pname',p.name+(p.params.length?' ( '+p.params.join(', ')+' )':'')));
+    if(opts.onDelProc){const x=el('button','pdel','✕');x.title='Block löschen';x.onclick=e=>{e.stopPropagation();opts.onDelProc(p);};hat.appendChild(x);}
+    d.appendChild(hat);d.appendChild(mkStack(p.body,ctx,true));d.appendChild(el('div','foot'));host.appendChild(d);
+  });
+  if(opts.hat!==false){
+    const m=el('div','blk c-control mainscript');
+    const hat=el('div','row hat');hat.innerHTML='<span class="lbl">Wenn <span class="flag">⚑</span> angeklickt</span>';
+    m.appendChild(hat);m.appendChild(mkStack(prog,ctx,false));host.appendChild(m);
+  } else host.appendChild(mkStack(prog,ctx,false));
+}
+
+/* ================= Programme ================= */
+const b=(t,...a)=>({t,a:a.map(String)});
+const R=(n,...body)=>({t:'repeat',a:[String(n)],body});
+const UNTIL=(c,...body)=>({t:'until',a:[c],body});
+const IF=(c,...body)=>({t:'if',a:[c],body});
+const IFE=(c,body,els)=>({t:'ifelse',a:[c],body,else:els});
+const FOR=(v,f,t,...body)=>({t:'for',a:[v,String(f),String(t)],body});
+const EACH=(v,l,...body)=>({t:'forEach',a:[v,l],body});
+const CALL=(name,...a)=>({t:'call',name,a:a.map(String)});
+const PROC=(name,params,kind,...body)=>({name,params,kind,body});
+
+const PROG={
+  G1:{program:[b('down'),b('move',100),b('turnR',90),b('move',100),b('turnR',90),b('move',100),b('turnR',90),b('move',100),b('turnR',90)]},
+  G_rect:{program:[b('down'),b('move',150),b('turnR',90),b('move',80),b('turnR',90),b('move',150),b('turnR',90),b('move',80),b('turnR',90)]},
+  G_tri:{program:[b('down'),b('color','rot'),b('move',120),b('turnR',120),b('move',120),b('turnR',120),b('move',120),b('turnR',120)]},
+  G_stairs:{program:[b('down'),b('move',40),b('turnL',90),b('move',40),b('turnR',90),b('move',40),b('turnL',90),b('move',40),b('turnR',90),b('move',40),b('turnL',90),b('move',40),b('turnR',90)]},
+  G_frame:{program:[b('up'),b('goto',-200,-140),b('down'),b('width',4),b('color','braun'),b('goto',200,-140),b('goto',200,140),b('goto',-200,140),b('goto',-200,-140),b('say','Fertig!')]},
+  K1:{program:[b('down'),R(4,b('move',100),b('turnR',90))]},
+  K_hex:{program:[b('down'),R(6,b('move',80),b('turnR',60))]},
+  K_circle:{program:[b('down'),R(36,b('move',10),b('turnR',10))]},
+  K_stairs:{program:[b('down'),R(5,b('move',30),b('turnL',90),b('move',30),b('turnR',90))]},
+  K_flower:{program:[b('down'),b('color','rot'),R(12,R(4,b('move',60),b('turnR',90)),b('turnR',30))]},
+  K_rosette:{program:[b('down'),b('color','lila'),R(10,R(6,b('move',50),b('turnR',60)),b('turnR',36))]},
+  K2:{program:[b('ask','Gib eine ganze Zahl ein:'),IFE('Antwort mod 2 = 0',[b('say','verbinde(Antwort, " ist gerade.")')],[b('say','verbinde(Antwort, " ist ungerade.")')])]},
+  K_age:{program:[b('ask','Wie alt bist du?'),IFE('Antwort ≥ 12',[b('say','Du darfst den Film sehen.')],[b('say','Leider bist du noch zu jung.')])]},
+  K_grade:{program:[b('ask','Wie viele Punkte hast du (0–100)?'),IFE('Antwort ≥ 85',[b('say','Note 1')],[IFE('Antwort ≥ 70',[b('say','Note 2')],[IFE('Antwort ≥ 55',[b('say','Note 3')],[IFE('Antwort ≥ 40',[b('say','Note 4')],[IFE('Antwort ≥ 20',[b('say','Note 5')],[b('say','Note 6')])])])])])]},
+  K3:{program:[b('goto',-200,0),b('point',90),b('down'),UNTIL('xposition > 200',b('move',5)),b('say','Ziel erreicht!')]},
+  K_pass:{program:[b('ask','Wie lautet das Passwort?'),UNTIL('Antwort = "geheim"',b('say','Falsch!'),b('ask','Wie lautet das Passwort?')),b('say','Willkommen!')]},
+  V_trace:{program:[b('set','a',4),b('set','b',7),b('set','a','a + b'),b('change','b',-2),b('set','c','a * b')]},
+  V1:{program:[b('down'),b('set','länge',5),R(40,b('move','länge'),b('turnR',90),b('change','länge',5))]},
+  V_tri:{program:[b('down'),b('set','länge',5),R(40,b('move','länge'),b('turnR',120),b('change','länge',6))]},
+  V_rainbow:{program:[b('down'),b('width',3),b('set','länge',2),R(90,b('color','zufällig'),b('move','länge'),b('turnR',59),b('change','länge',2.5))]},
+  V2:{program:[b('set','summe',0),FOR('i',1,100,b('change','summe','i')),b('say','verbinde("Die Summe ist ", summe)')]},
+  V_sum2:{program:[b('set','summe',0),b('set','i',1),R(100,b('change','summe','i'),b('change','i',1)),b('say','verbinde("Die Summe ist ", summe)')]},
+  V3:{program:[b('set','geheim','zufall(1, 100)'),b('set','versuche',1),b('ask','Ich denke mir eine Zahl von 1 bis 100. Rate!'),
+    UNTIL('Antwort = geheim',IFE('Antwort < geheim',[b('say','Zu klein!')],[b('say','Zu groß!')]),b('change','versuche',1),b('ask','Dein nächster Tipp:')),
+    b('say','verbinde("Richtig! Du hast ", versuche, " Versuche gebraucht.")')]},
+  V_guess7:{program:[b('set','geheim','zufall(1, 100)'),b('set','versuche',1),b('ask','Ich denke mir eine Zahl von 1 bis 100. Rate!'),
+    UNTIL('Antwort = geheim oder versuche ≥ 7',IFE('Antwort < geheim',[b('say','Zu klein!')],[b('say','Zu groß!')]),b('change','versuche',1),b('ask','Dein nächster Tipp:')),
+    IFE('Antwort = geheim',[b('say','verbinde("Richtig! Du hast ", versuche, " Versuche gebraucht.")')],[b('say','verbinde("Verloren! Die Zahl war ", geheim, ".")')])]},
+  P1:{procs:[PROC('quadrat',['seite'],'cmd',R(4,b('move','seite'),b('turnR',90)))],
+      program:[b('down'),CALL('quadrat',40),CALL('quadrat',80),CALL('quadrat',120),b('color','rot'),b('turnR',180),CALL('quadrat',60)]},
+  P_poly:{procs:[PROC('vieleck',['ecken','länge'],'cmd',R('ecken',b('move','länge'),b('turnR','360 / ecken')))],
+      program:[b('up'),b('goto',-30,-150),b('down'),FOR('n',3,10,b('color','zufällig'),CALL('vieleck','n',60))]},
+  P_house:{procs:[PROC('quadrat',['seite'],'cmd',R(4,b('move','seite'),b('turnR',90))),
+      PROC('haus',['größe'],'cmd',CALL('quadrat','größe'),b('move','größe'),b('turnR',30),b('move','größe'),b('turnR',120),b('move','größe'),b('turnR',210),b('move','-größe'))],
+      program:[b('up'),b('goto',-210,-100),b('point',0),b('down'),R(4,CALL('haus',60),b('up'),b('turnR',90),b('move',40),b('turnL',90),b('down'))]},
+  P2:{procs:[PROC('quadratzahl',['x'],'rep',b('report','x * x')),
+      PROC('maximum',['a','b'],'rep',IFE('a > b',[b('report','a')],[b('report','b')])),
+      PROC('fakultät',['n'],'rep',IFE('n ≤ 1',[b('report',1)],[b('report','n * fakultät(n - 1)')]))],
+      program:[b('say','verbinde("7 zum Quadrat ist ", quadratzahl(7))'),b('wait',1.5),b('say','verbinde("Das Maximum von 17 und 42 ist ", maximum(17, 42))'),b('wait',1.5),
+        FOR('i',1,8,b('say','verbinde(i, "! = ", fakultät(i))'),b('wait',0.8))]},
+  P_mean:{procs:[PROC('mittelwert',['a','b'],'rep',b('report','(a + b) / 2'))],
+      program:[b('say','verbinde("Der Mittelwert von 4 und 9 ist ", mittelwert(4, 9))')]},
+  P_prime:{procs:[PROC('istPrim',['n'],'rep',IF('n < 2',b('report','falsch')),b('set','t',2),UNTIL('t * t > n',IF('n mod t = 0',b('report','falsch')),b('change','t',1)),b('report','wahr'))],
+      program:[FOR('z',1,30,IF('istPrim(z)',b('say','verbinde(z, " ist eine Primzahl.")'),b('wait',0.6)))]},
+  P_tree:{procs:[PROC('baum',['länge'],'cmd',IF('länge > 8',b('width','länge / 10'),b('move','länge'),b('turnL',25),CALL('baum','länge * 0.7'),b('turnR',50),CALL('baum','länge * 0.7'),b('turnL',25),b('up'),b('move','-länge'),b('down')))],
+      program:[b('up'),b('goto',0,-170),b('point',0),b('color','grün'),b('down'),CALL('baum',90)]},
+  L1:{program:[b('listNew','noten'),b('listAdd',2,'noten'),b('listAdd',3,'noten'),b('listAdd',1,'noten'),b('listAdd',4,'noten'),b('listAdd',2,'noten'),b('listAdd',3,'noten'),
+      b('set','summe',0),EACH('note','noten',b('change','summe','note')),b('say','verbinde("Durchschnitt: ", runde(summe / länge(noten) * 100) / 100)')]},
+  L2:{program:[b('set','zahlen','liste(12, 45, 7, 88, 23, 61)'),b('set','größte','element(1, zahlen)'),EACH('z','zahlen',IF('z > größte',b('set','größte','z'))),b('say','verbinde("Die größte Zahl ist ", größte)')]},
+  L_min:{program:[b('set','noten','liste(2, 3, 1, 4, 2, 3, 5, 1)'),b('set','beste','element(1, noten)'),b('set','gute',0),
+      EACH('note','noten',IF('note < beste',b('set','beste','note')),IF('note ≤ 2',b('change','gute',1))),
+      b('say','verbinde("Beste Note: ", beste, " – Anzahl der Noten 1 und 2: ", gute)')]},
+  L3:{program:[b('listNew','einkauf'),b('ask','Was brauchst du? (fertig = Ende)'),UNTIL('Antwort = "fertig"',b('listAdd','Antwort','einkauf'),b('ask','Was noch? (fertig = Ende)')),
+      b('say','verbinde("Auf deiner Liste stehen ", länge(einkauf), " Dinge.")')]},
+  PA:{program:[b('up'),b('goto',-60,-80),b('width',3),b('down'),b('goto',60,-80),b('goto',-60,40),b('goto',60,40),b('goto',0,110),b('goto',-60,40),b('goto',-60,-80),b('goto',60,40),b('goto',60,-80),b('say','Das ist das Haus vom Nikolaus!')]},
+  PB:{procs:[PROC('stern',['größe'],'cmd',R(5,b('move','größe'),b('turnR',144)))],
+      program:[b('width',2),R(30,b('up'),b('goto','zufall(-220, 200)','zufall(-160, 150)'),b('color','zufällig'),b('down'),CALL('stern','zufall(10, 40)'))]},
+  PC:{program:[b('set','richtig',0),R(5,b('set','a','zufall(2, 10)'),b('set','b','zufall(2, 10)'),b('ask','verbinde("Was ist ", a, " · ", b, "?")'),
+      IFE('Antwort = a * b',[b('say','Richtig!'),b('change','richtig',1)],[b('say','verbinde("Leider falsch – richtig ist ", a * b, ".")')]),b('wait',1)),
+      b('say','verbinde("Du hast ", richtig, " von 5 Aufgaben richtig!")')]},
+  PD:{program:[b('set','fib','liste(1, 1)'),R(13,b('listAdd','element(länge(fib), fib) + element(länge(fib) - 1, fib)','fib')),b('say','fib')]},
+  PE:{program:[b('set','namen','liste("Anna", "Ben", "Clara", "David", "Emil", "Fatma")'),b('ask','Welchen Namen suchst du?'),b('set','position',0),
+      FOR('i',1,'länge(namen)',IF('element(i, namen) = Antwort',b('set','position','i'))),
+      IFE('position > 0',[b('say','verbinde(Antwort, " steht an Position ", position, ".")')],[b('say','verbinde(Antwort, " steht nicht in der Liste.")')])]},
+  PF:{program:[b('set','zahlen','liste(42, 7, 19, 3, 88, 25, 61, 11)'),
+      FOR('durchgang',1,'länge(zahlen) - 1',FOR('i',1,'länge(zahlen) - durchgang',IF('element(i, zahlen) > element(i + 1, zahlen)',b('set','temp','element(i, zahlen)'),b('listRep','i','zahlen','element(i + 1, zahlen)'),b('listRep','i + 1','zahlen','temp')))),
+      b('say','zahlen')]},
+  FREE:{program:[b('say','Los geht\'s – baue dein eigenes Programm!')]},
+};
+
+const PAL_G=['move','turnR','turnL','point','goto','down','up','clear','color','width','say','wait'];
+const PAL_K=[...PAL_G,'repeat','until','if','ifelse','ask'];
+const PAL_V=[...PAL_K,'for','set','change'];
+const PAL_P=[...PAL_V,'report'];
+const PAL_L=[...PAL_V,'listNew','listAdd','listDel','listRep','forEach'];
+const PAL_ALL=[...PAL_P,'listNew','listAdd','listDel','listRep','forEach'];
+const WSCFG={
+  G1:{start:'G1',palette:PAL_G,title:'Baukasten 1 · Sequenzen',ref:0,grid:true},
+  K1:{start:'K1',palette:PAL_K,title:'Baukasten 2 · Wiederholungen',ref:1},
+  K2:{start:'K2',palette:PAL_K,title:'Baukasten 3 · Verzweigungen',ref:1},
+  V1:{start:'V1',palette:PAL_V,title:'Baukasten 4 · Variablen',ref:2},
+  V3:{start:'V3',palette:PAL_V,title:'Baukasten 5 · Zahlenraten',ref:2},
+  P1:{start:'P1',palette:PAL_P,title:'Baukasten 6 · Eigene Blöcke',ref:2,allowProcs:true},
+  P2:{start:'P2',palette:PAL_P,title:'Baukasten 7 · Funktionen',ref:3,allowProcs:true},
+  L1:{start:'L1',palette:PAL_L,title:'Baukasten 8 · Listen',ref:4},
+  FREE:{start:'FREE',palette:PAL_ALL,title:'Freier Baukasten',ref:4,allowProcs:true},
+};
+const REF=[
+  [1,'+  -  *  /','rechnen'],[1,'a mod b','Rest von a : b'],[1,'=  ≠  <  >  ≤  ≥','vergleichen'],[1,'und  oder  nicht','Bedingungen verknüpfen'],
+  [1,'Antwort','letzte Eingabe bei „frage“'],[1,'xposition  yposition  richtung','Position des Sprites'],
+  [2,'zufall(1, 10)','Zufallszahl'],[2,'verbinde("a", x)','Texte verbinden'],[2,'runde(x)  wurzel(x)','runden, Wurzel'],
+  [3,'name(…)','eigene Funktion aufrufen'],
+  [4,'liste(1, 2, 3)','neue Liste'],[4,'element(i, L)','Element an Position i'],[4,'länge(L)','Anzahl der Elemente'],[4,'enthält(L, x)','ist x in L?'],
+];
+const SPEED={1:{steps:1,delay:450,name:'Zeitlupe'},2:{steps:1,delay:140,name:'langsam'},3:{steps:1,delay:30,name:'normal'},4:{steps:20,delay:0,name:'schnell'},5:{steps:4000,delay:0,name:'Turbo'}};
+const LIMIT=3000000;
+
+/* ================= Baukasten ================= */
+const WS={};
+class Workspace{
+  constructor(host){
+    this.host=host;this.id=host.dataset.ws;this.cfg=WSCFG[this.id];
+    const saved=store.get('ws:'+this.id,null);
+    const src=saved||PROG[this.cfg.start]||{program:[]};
+    this.program=clone(src.program);this.procs=(src.procs||[]).map(cloneProc);
+    this.target=this.program;this.mouths=[];this.globals=new Map();this.running=false;
+    this.speed=store.get('speed',3);
+    this.build();this.renderPalette();this.renderScript();this.resetStage();this.paint();
+    WS[this.id]=this;
+  }
+  build(){
+    const h=this.host;
+    h.innerHTML=`<div class="ws-title">🧩 ${esc(this.cfg.title)} <small>– wie in Snap!: Blöcke anklicken, Werte eintippen, ⚑ starten</small></div>
+    <div class="ws-pal"><div class="ws-h">Blockpalette</div><div class="pal"></div></div>
+    <div class="ws-scr"><div class="ws-h">Skriptbereich<span class="ws-tools">${this.cfg.allowProcs?'<button data-a="newproc">+ Neuer Block</button>':''}<button data-a="clearall">Alles löschen</button><button data-a="reset">Ausgangsprogramm</button></span></div>
+      <div class="scr"></div><div class="hint">Gelb gestrichelt = hier wird eingefügt. Klicke auf eine Lücke oder auf den Bereich unter „Wenn ⚑ angeklickt“, um die Einfügestelle zu wählen.</div></div>
+    <div class="ws-stage"><div class="stagebar"><button class="go" type="button">⚑ Start</button><button class="stop" type="button" title="Stopp">■</button>
+      <label>Tempo <select class="spd">${Object.entries(SPEED).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('')}</select></label></div>
+      <div class="stagebar"><label><input type="checkbox" class="rst" checked> Bühne beim Start zurücksetzen</label><label><input type="checkbox" class="grd"${this.cfg.grid?' checked':''}> Gitter</label></div>
+      <canvas class="stage" width="960" height="720" aria-label="Bühne"></canvas>
+      <div class="coords"><span class="mc">Maus: –</span><span class="sc"></span></div>
+      <div class="msg"></div><div class="watchers"></div><div class="log"></div></div>`;
+    this.palEl=$('.pal',h);this.scrEl=$('.scr',h);this.msgEl=$('.msg',h);this.watchEl=$('.watchers',h);this.logEl=$('.log',h);
+    this.canvas=$('canvas',h);this.ctx=this.canvas.getContext('2d');
+    this.trail=document.createElement('canvas');this.trail.width=960;this.trail.height=720;this.tctx=this.trail.getContext('2d');
+    this.rst=$('.rst',h);this.grd=$('.grd',h);this.grd.onchange=()=>this.paint();
+    $('.go',h).onclick=()=>this.run();$('.stop',h).onclick=()=>{this.stop();this.setMsg('Programm gestoppt.','i');};
+    const spd=$('.spd',h);spd.value=this.speed;spd.onchange=()=>{this.speed=+spd.value;store.set('speed',this.speed);};
+    $$('.ws-tools button',h).forEach(bt=>bt.onclick=()=>this.tool(bt.dataset.a));
+    this.canvas.addEventListener('mousemove',e=>{const r=this.canvas.getBoundingClientRect();const x=Math.round((e.clientX-r.left)/r.width*480-240),y=Math.round(180-(e.clientY-r.top)/r.height*360);$('.mc',h).textContent=`Maus: x: ${x} | y: ${y}`;});
+    this.canvas.addEventListener('mouseleave',()=>{$('.mc',h).textContent='Maus: –';});
+  }
+  tool(a){
+    if(a==='newproc')return this.newProc();
+    if(a==='clearall'){if(!confirm('Alle Blöcke im Hauptskript löschen?'))return;this.stop();this.program.length=0;this.target=this.program;this.changed(true);}
+    if(a==='reset'){if(!confirm('Das Ausgangsprogramm wiederherstellen? Deine Änderungen gehen verloren.'))return;this.load(PROG[this.cfg.start]);store.del('ws:'+this.id);}
+  }
+  newProc(){
+    let name=prompt('Name des neuen Blocks (ohne Leerzeichen), z. B. dreieck:','');if(name==null)return;name=name.trim();
+    if(!/^[A-Za-zÄÖÜäöüß_][A-Za-zÄÖÜäöüß_0-9]*$/.test(name))return alert('Der Name darf nur Buchstaben, Ziffern und _ enthalten und nicht mit einer Ziffer beginnen.');
+    if(this.procs.some(p=>p.name===name)||BUILTIN[name.toLowerCase()])return alert('Diesen Namen gibt es schon.');
+    const ps=prompt('Parameter (Eingaben), durch Komma getrennt – oder leer lassen. Beispiel: seite','');if(ps==null)return;
+    const params=ps.split(',').map(s=>s.trim()).filter(Boolean);
+    if(params.some(p=>!/^[A-Za-zÄÖÜäöüß_][A-Za-zÄÖÜäöüß_0-9]*$/.test(p)))return alert('Ungültiger Parametername.');
+    const isFn=confirm('Soll der Block einen Wert berichten (Funktion)?\n\nOK = Funktion (mit „berichte“)\nAbbrechen = Befehlsblock');
+    const p={name,params,kind:isFn?'rep':'cmd',body:[]};this.procs.push(p);this.target=p.body;
+    this.renderPalette();this.changed(true);
+  }
+  load(prog){this.stop();this.program=clone(prog.program);this.procs=(prog.procs||[]).map(cloneProc);this.target=this.program;this.renderPalette();this.changed(true);this.setMsg('');}
+  setTarget(list){this.target=list;this.mouths.forEach(m=>m.el.classList.toggle('target',m.list===list));}
+  contains(blk,list){if(!blk.body)return false;if(blk.body===list||blk.else===list)return true;return blk.body.some(x=>this.contains(x,list))||(blk.else||[]).some(x=>this.contains(x,list));}
+  op(a,list,i){
+    if(a==='up'&&i>0)[list[i-1],list[i]]=[list[i],list[i-1]];
+    else if(a==='down'&&i<list.length-1)[list[i+1],list[i]]=[list[i],list[i+1]];
+    else if(a==='dup')list.splice(i+1,0,clone([list[i]])[0]);
+    else if(a==='del'){const [rm]=list.splice(i,1);if(this.contains(rm,this.target))this.target=list;}
+    this.changed(true);
+  }
+  insert(t,procName){
+    const sp=SPEC[t]||{};let blk;
+    if(t==='call'){const p=this.procs.find(x=>x.name===procName);blk={id:UID++,t:'call',name:procName,a:p.params.map(()=>'10')};}
+    else{blk={id:UID++,t,a:[...sp.d]};if(sp.c)blk.body=[];if(sp.c===2)blk.else=[];}
+    this.target.push(blk);if(sp.c)this.target=blk.body;
+    this.changed(true);
+    const n=this.scrEl.querySelector(`[data-id="${blk.id}"]`);if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+  changed(rerender){
+    if(rerender)this.renderScript();
+    clearTimeout(this._st);this._st=setTimeout(()=>store.set('ws:'+this.id,{program:strip(this.program),procs:this.procs.map(p=>({...p,body:strip(p.body)}))}),300);
+  }
+  renderPalette(){
+    const pal=this.palEl;pal.innerHTML='';const ctx={ws:null,procs:this.procs};
+    const groups={};this.cfg.palette.forEach(t=>{(groups[SPEC[t].cat]=groups[SPEC[t].cat]||[]).push(t);});
+    Object.keys(CATS).forEach(cat=>{
+      if(cat==='custom'){if(!this.procs.length&&!this.cfg.allowProcs)return;}else if(!groups[cat])return;
+      const h=el('div','pcat c-'+cat,CATS[cat]);pal.appendChild(h);
+      if(cat==='custom'){
+        if(!this.procs.length)pal.appendChild(el('div','pfn','Noch keine – „+ Neuer Block“'));
+        this.procs.forEach(p=>{
+          if(p.kind==='rep'){pal.appendChild(el('div','pfn',`${p.name}(${p.params.join(', ')}) – Funktion, in Eingabefeldern verwenden`));return;}
+          const n=mkBlock({id:0,t:'call',name:p.name,a:p.params.map(x=>x)},null,0,ctx);n.classList.add('pitem');n.title='Klicken zum Einfügen';n.onclick=()=>this.insert('call',p.name);pal.appendChild(n);
+        });return;
+      }
+      groups[cat].forEach(t=>{const sp=SPEC[t];const s={id:0,t,a:[...sp.d]};if(sp.c)s.body=[];if(sp.c===2)s.else=[];
+        const n=mkBlock(s,null,0,ctx);n.classList.add('pitem');n.title='Klicken zum Einfügen';n.onclick=()=>this.insert(t);pal.appendChild(n);});
+    });
+    if(this.cfg.ref){const d=el('details','ref');d.innerHTML='<summary>Rechnen &amp; Vergleichen (Operatoren)</summary><table>'+REF.filter(r=>r[0]<=this.cfg.ref).map(r=>`<tr><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')+'</table><p>Diese Ausdrücke tippst du direkt in die weißen Felder. Text in Anführungszeichen setzen: "Hallo".</p>';pal.appendChild(d);}
+  }
+  renderScript(){
+    const scr=this.scrEl,top=scr.scrollTop;scr.innerHTML='';this.mouths=[];
+    const ctx={ws:this,procs:this.procs};
+    renderProgram(scr,this.program,ctx,{onDelProc:this.cfg.allowProcs?p=>{if(!confirm(`Block „${p.name}“ löschen?`))return;this.procs.splice(this.procs.indexOf(p),1);if(!this.mouths.some(m=>m.list===this.target)||p.body===this.target||p.body.some(x=>this.contains(x,this.target)))this.target=this.program;this.renderPalette();this.changed(true);}:null});
+    if(!this.mouths.some(m=>m.list===this.target)){this.target=this.program;this.setTarget(this.program);}
+    scr.scrollTop=top;
+  }
+  /* ---- Bühne ---- */
+  resetStage(){this.turtle={x:0,y:0,dir:90,pen:false,color:COLORS.blau,width:2};this.bubble=null;this.lastSay='';this.clearTrail();}
+  clearTrail(){const g=this.tctx;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,960,720);g.setTransform(2,0,0,2,0,0);}
+  moveTo(x,y){const T=this.turtle;if(T.pen){const g=this.tctx;g.strokeStyle=T.color;g.lineWidth=T.width;g.lineCap='round';g.lineJoin='round';g.beginPath();g.moveTo(240+T.x,180-T.y);g.lineTo(240+x,180-y);g.stroke();}T.x=x;T.y=y;}
+  moveBy(n){const r=this.turtle.dir*Math.PI/180;this.moveTo(this.turtle.x+Math.sin(r)*n,this.turtle.y+Math.cos(r)*n);}
+  draw(){
+    const g=this.ctx,T=this.turtle;g.setTransform(1,0,0,1,0,0);g.fillStyle='#fff';g.fillRect(0,0,960,720);
+    g.setTransform(2,0,0,2,0,0);
+    if(this.grd.checked){g.strokeStyle='#eef0f5';g.lineWidth=1;for(let x=-200;x<=200;x+=50){g.beginPath();g.moveTo(240+x,0);g.lineTo(240+x,360);g.stroke();}for(let y=-150;y<=150;y+=50){g.beginPath();g.moveTo(0,180-y);g.lineTo(480,180-y);g.stroke();}
+      g.strokeStyle='#c5cbd8';g.beginPath();g.moveTo(0,180);g.lineTo(480,180);g.moveTo(240,0);g.lineTo(240,360);g.stroke();
+      g.fillStyle='#9aa1b2';g.font='9px system-ui';for(let x=-200;x<=200;x+=100)if(x)g.fillText(x,240+x+2,190);for(let y=-150;y<=150;y+=50)if(y)g.fillText(y,244,180-y-2);}
+    g.drawImage(this.trail,0,0,960,720,0,0,480,360);
+    const sx=240+T.x,sy=180-T.y;
+    g.save();g.translate(sx,sy);g.rotate((T.dir-90)*Math.PI/180);g.beginPath();g.moveTo(13,0);g.lineTo(-8,-8);g.lineTo(-3,0);g.lineTo(-8,8);g.closePath();
+    g.fillStyle=T.color;g.fill();g.strokeStyle='#fff';g.lineWidth=1.5;g.stroke();g.restore();
+    if(this.bubble)this.drawBubble(g,this.bubble,sx,sy);
+    $('.sc',this.host).textContent=`Sprite: x: ${Math.round(T.x)} | y: ${Math.round(T.y)} | Richtung: ${Math.round(this.dirNorm())}`;
+  }
+  dirNorm(){let d=((this.turtle.dir+180)%360+360)%360-180;if(d===-180)d=180;return d;}
+  drawBubble(g,text,sx,sy){
+    g.font='13px system-ui,sans-serif';const maxW=170,words=String(text).split(/\s+/),lines=[];let line='';
+    words.forEach(w=>{const tst=line?line+' '+w:w;if(g.measureText(tst).width>maxW&&line){lines.push(line);line=w;}else line=tst;});if(line)lines.push(line);
+    const show=lines.slice(0,6);const w=Math.min(maxW,Math.max(...show.map(l=>g.measureText(l).width)))+16,h=show.length*16+10;
+    let bx=sx+14,by=sy-28-h;if(bx+w>476)bx=sx-14-w;if(bx<4)bx=4;if(by<4)by=4;
+    g.fillStyle='#fff';g.strokeStyle='#8a8fa3';g.lineWidth=1.5;g.beginPath();
+    if(g.roundRect)g.roundRect(bx,by,w,h,10);else g.rect(bx,by,w,h);g.fill();g.stroke();
+    g.beginPath();g.moveTo(bx+(bx<sx?w-18:16),by+h);g.lineTo(sx+(bx<sx?-4:4),sy-10);g.lineTo(bx+(bx<sx?w-30:28),by+h);g.fillStyle='#fff';g.fill();g.stroke();
+    g.fillStyle='#1d2433';show.forEach((l,i)=>g.fillText(l,bx+8,by+19+i*16));
+  }
+  say(t){this.bubble=t===''?null:t;this.lastSay=t;if(t!=='')this.addLog('💬 '+t);}
+  addLog(t){const d=el('div',null,t);this.logEl.appendChild(d);this.logEl.classList.add('has');while(this.logEl.children.length>60)this.logEl.firstChild.remove();this.logEl.scrollTop=1e9;}
+  setMsg(t,k){this.msgEl.textContent=t;this.msgEl.className='msg'+(k?' '+k:'');}
+  renderWatchers(){
+    const parts=[];
+    for(const [k,v] of this.globals){
+      if(Array.isArray(v)){const rows=v.slice(0,40).map((x,i)=>`<tr><td>${i+1}</td><td>${esc(fmt(x))}</td></tr>`).join('');parts.push(`<div class="watch lw"><span>${esc(k)}</span><table>${rows}</table>${v.length>40?'<small>…</small>':''}<small>Länge: ${v.length}</small></div>`);}
+      else parts.push(`<div class="watch"><span>${esc(k)}</span><b>${esc(fmt(v))}</b></div>`);
+    }
+    const h=parts.join('');if(h!==this._wh){this.watchEl.innerHTML=h;this._wh=h;}
+  }
+  highlight(){
+    if(this._hlEl)this._hlEl.classList.remove('running');this._hlEl=null;
+    if(this.running&&this.cur!=null){const n=this.scrEl.querySelector(`[data-id="${this.cur}"]>.row`);if(n){n.classList.add('running');this._hlEl=n;}}
+  }
+  paint(){this.draw();this.highlight();this.renderWatchers();}
+  /* ---- Ausführung ---- */
+  run(){
+    this.stop(true);
+    $$('.row.err',this.scrEl).forEach(r=>r.classList.remove('err'));
+    if(this.rst.checked)this.resetStage();
+    this.globals=new Map();this.steps=0;this.depth=0;this.cur=null;this.logEl.innerHTML='';this.logEl.classList.remove('has');this.setMsg('');
+    this.gen=this.execList(this.program,{locals:null,frame:{done:false}});
+    this.running=true;this.loop();
+  }
+  stop(silent){
+    this.running=false;clearTimeout(this.timer);cancelAnimationFrame(this.raf);this.gen=null;this.highlight();
+  }
+  finish(){this.running=false;this.paint();this.setMsg('✔ Programm beendet.','i');}
+  fail(e){
+    this.running=false;this.paint();
+    if(e instanceof StopRun){this.setMsg('Programm abgebrochen.','i');return;}
+    this.setMsg('⚠ Fehler: '+e.message,'e');
+    if(this.cur!=null){const n=this.scrEl.querySelector(`[data-id="${this.cur}"]>.row`);if(n){n.classList.add('err');n.scrollIntoView({block:'nearest'});}}
+  }
+  loop(){
+    if(!this.running)return;
+    const sp=SPEED[this.speed]||SPEED[3];let n=0;
+    try{
+      while(n<sp.steps){
+        const r=this.gen.next();
+        if(r.done){this.finish();return;}
+        const v=r.value;n++;
+        if(v.hl!=null)this.cur=v.hl;
+        if(++this.steps>LIMIT)throw new Error('Das Programm läuft sehr lange – steckt es in einer Endlosschleife?');
+        if(v.wait!=null){this.paint();this.timer=setTimeout(()=>this.loop(),v.wait);return;}
+      }
+    }catch(e){this.fail(e);return;}
+    this.paint();
+    if(sp.delay)this.timer=setTimeout(()=>this.loop(),sp.delay);else this.raf=requestAnimationFrame(()=>this.loop());
+  }
+  getVar(env,n){
+    if(env.locals&&env.locals.has(n))return env.locals.get(n);
+    if(this.globals.has(n))return this.globals.get(n);
+    const l=n.toLowerCase();
+    if(l==='xposition')return Math.round(this.turtle.x*100)/100;
+    if(l==='yposition')return Math.round(this.turtle.y*100)/100;
+    if(l==='richtung')return this.dirNorm();
+    throw new MissingVar(n);
+  }
+  setVar(env,n,v){if(env.locals&&env.locals.has(n))env.locals.set(n,v);else this.globals.set(n,v);}
+  getList(env,n){const v=this.getVar(env,n);if(!Array.isArray(v))throw new Error(`„${n}“ ist keine Liste. Lege sie mit „setze ${n} auf leere Liste“ an.`);return v;}
+  findProc(n){return this.procs.find(p=>p.name===n)||this.procs.find(p=>p.name.toLowerCase()===n.toLowerCase());}
+  callFn(name,args){
+    const l=name.toLowerCase();
+    if(l==='xposition'||l==='yposition'||l==='richtung')return this.getVar({locals:null},name);
+    const p=this.findProc(name);
+    if(!p){const f=BUILTIN[l];if(!f)throw new Error(`Die Funktion „${name}“ gibt es nicht.`);if(args.length<f.length)throw new Error(`„${name}“ braucht ${f.length} Eingabe(n).`);return f(...args);}
+    if(p.kind!=='rep')throw new Error(`„${p.name}“ ist ein Befehlsblock und berichtet keinen Wert.`);
+    if(args.length!==p.params.length)throw new Error(`„${p.name}“ braucht ${p.params.length} Eingabe(n).`);
+    if(++this.depth>600){this.depth--;throw new Error('Zu tiefe Rekursion – fehlt eine Abbruchbedingung?');}
+    const env={locals:new Map(p.params.map((pn,i)=>[pn,args[i]])),frame:{done:false}};
+    try{const g=this.execList(p.body,env);for(;;){const r=g.next();if(r.done)break;if(++this.steps>LIMIT)throw new Error('Das Programm läuft sehr lange – steckt es in einer Endlosschleife?');}}
+    finally{this.depth--;}
+    if(env.frame.ret===undefined)throw new Error(`Die Funktion „${p.name}“ hat nichts berichtet – fehlt ein „berichte“-Block?`);
+    return env.frame.ret;
+  }
+  slot(src,env,strict){
+    const s=String(src??'').trim();let ast;
+    try{ast=parseExpr(s);}catch(e){if(strict)throw new Error(`„${s}“ verstehe ich nicht (${e.message}).`);return s;}
+    const ctx={get:n=>this.getVar(env,n),call:(n,a)=>this.callFn(n,a)};
+    try{return ev(ast,ctx);}
+    catch(e){
+      if(e instanceof MissingVar){if(!strict&&!/["'(„]/.test(s))return s;throw new Error(e.message+(strict?' (Text bitte in Anführungszeichen schreiben, z. B. "fertig".)':''));}
+      throw e;
+    }
+  }
+  *execList(list,env){for(const blk of list){if(env.frame.done)return;yield* this.exec(blk,env);}}
+  *exec(blk,env){
+    yield {hl:blk.id};
+    const A=(i,strict)=>this.slot(blk.a[i],env,strict);
+    const V=i=>{const n=String(blk.a[i]||'').trim();if(!/^[A-Za-zÄÖÜäöüß_][A-Za-zÄÖÜäöüß_0-9]*$/.test(n))throw new Error(`„${n}“ ist kein gültiger Variablenname.`);return n;};
+    const T=this.turtle;const norm=d=>((d%360)+360)%360;
+    switch(blk.t){
+      case 'move':this.moveBy(num(A(0)));break;
+      case 'turnR':T.dir=norm(T.dir+num(A(0)));break;
+      case 'turnL':T.dir=norm(T.dir-num(A(0)));break;
+      case 'point':T.dir=norm(num(A(0)));break;
+      case 'goto':this.moveTo(num(A(0)),num(A(1)));break;
+      case 'say':this.say(fmt(A(0)));break;
+      case 'clear':this.clearTrail();break;
+      case 'down':T.pen=true;break;
+      case 'up':T.pen=false;break;
+      case 'color':T.color=blk.a[0]==='zufällig'?`hsl(${Math.floor(Math.random()*360)},78%,47%)`:(COLORS[blk.a[0]]||blk.a[0]);break;
+      case 'width':T.width=Math.max(0.5,num(A(0)));break;
+      case 'wait':yield {wait:Math.max(0,num(A(0)))*1000};break;
+      case 'repeat':{const n=Math.round(num(A(0)));for(let k=0;k<n;k++){yield* this.execList(blk.body,env);if(env.frame.done)return;yield {tick:1};}break;}
+      case 'until':{while(!truthy(A(0,true))){yield* this.execList(blk.body,env);if(env.frame.done)return;yield {tick:1};}break;}
+      case 'for':{const v=V(0),a=num(A(1)),z=num(A(2)),st=a<=z?1:-1;for(let i=a;st>0?i<=z:i>=z;i+=st){this.setVar(env,v,i);yield* this.execList(blk.body,env);if(env.frame.done)return;yield {tick:1};}break;}
+      case 'if':if(truthy(A(0,true)))yield* this.execList(blk.body,env);break;
+      case 'ifelse':yield* this.execList(truthy(A(0,true))?blk.body:blk.else,env);break;
+      case 'report':if(!env.locals)throw new Error('„berichte“ kann nur in einer Funktion (eigener Block) verwendet werden.');env.frame.ret=A(0);env.frame.done=true;break;
+      case 'ask':{const q=fmt(A(0));this.bubble=q;yield {wait:40};let ans;
+        try{ans=window.prompt((this.lastSay?'💬 '+this.lastSay+'\n\n':'')+q,'');}catch(e){throw new Error('Eingabefenster sind in dieser Ansicht blockiert. Öffne die Datei direkt im Browser.');}
+        this.bubble=null;if(ans===null)throw new StopRun();ans=ans.trim();this.globals.set('Antwort',ans);this.addLog('❓ '+q+' → '+ans);this.lastSay='';break;}
+      case 'set':this.setVar(env,V(0),A(1));break;
+      case 'change':{const n=V(0);this.setVar(env,n,num(this.getVar(env,n))+num(A(1)));break;}
+      case 'listNew':this.setVar(env,V(0),[]);break;
+      case 'listAdd':{const v=A(0);this.getList(env,V(1)).push(v);break;}
+      case 'listDel':{const L=this.getList(env,V(1)),i=num(A(0));if(!Number.isInteger(i)||i<1||i>L.length)throw new Error(`Position ${fmt(i)} gibt es in „${blk.a[1]}“ nicht (Länge ${L.length}).`);L.splice(i-1,1);break;}
+      case 'listRep':{const L=this.getList(env,V(1)),i=num(A(0));if(!Number.isInteger(i)||i<1||i>L.length)throw new Error(`Position ${fmt(i)} gibt es in „${blk.a[1]}“ nicht (Länge ${L.length}).`);L[i-1]=A(2);break;}
+      case 'forEach':{const v=V(0),L=this.getList(env,V(1));for(const item of [...L]){this.setVar(env,v,item);yield* this.execList(blk.body,env);if(env.frame.done)return;yield {tick:1};}break;}
+      case 'call':{const p=this.findProc(blk.name);if(!p)throw new Error(`Den Block „${blk.name}“ gibt es nicht (mehr).`);
+        if(p.kind==='rep')throw new Error(`„${p.name}“ ist eine Funktion – verwende sie in einem Eingabefeld, z. B. ${p.name}(…).`);
+        const args=p.params.map((_,i)=>A(i));
+        if(++this.depth>600){this.depth--;throw new Error('Zu tiefe Rekursion – fehlt eine Abbruchbedingung?');}
+        try{yield* this.execList(p.body,{locals:new Map(p.params.map((pn,i)=>[pn,args[i]])),frame:{done:false}});}finally{this.depth--;}
+        break;}
+      default:throw new Error('Unbekannter Block');
+    }
+  }
+}
+
+/* ================= Statische Blockbilder ================= */
+function renderStatics(){
+  $$('.blocks[data-prog]').forEach(h=>{const p=PROG[h.dataset.prog];if(!p)return;renderProgram(h,clone(p.program),{ws:null,procs:(p.procs||[]).map(cloneProc)});});
+  $$('.blocks[data-b]').forEach(h=>{
+    h.classList.add('inline');
+    h.dataset.b.split('|').forEach(part=>{
+      const [t,...rest]=part.split(':');const sp=SPEC[t]; const args=rest.join(':');
+      let blk;
+      if(t==='call'){const [name,...a]=args.split(';');blk={t:'call',name,a};}
+      else blk={t,a:args?args.split(';'):[...(sp?sp.d:[])]};
+      h.appendChild(mkBlock(blk,null,0,{ws:null,procs:[]}));
+    });
+  });
+  $$('[data-load]').forEach(bt=>bt.onclick=()=>{
+    const ws=WS[bt.dataset.into],p=PROG[bt.dataset.load];if(!ws||!p)return;
+    if(!confirm('Das Programm im Baukasten wird durch den Lösungsvorschlag ersetzt. Fortfahren?'))return;
+    ws.load(p);ws.host.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+}
+
+/* ================= Quiz ================= */
+const QUIZ={
+  g:[
+    {q:'Was ist ein Algorithmus?',o:['Eine eindeutige Handlungsvorschrift aus endlich vielen Schritten zur Lösung eines Problems','Ein besonders schneller Computer','Eine bestimmte Programmiersprache','Ein zufälliges Ausprobieren, bis es klappt'],a:0,e:'Ein Algorithmus ist eine eindeutige, endliche Handlungsvorschrift. Programmiersprachen dienen dazu, Algorithmen aufzuschreiben.'},
+    {q:'Wo liegt der Punkt (0 | 0) auf der Snap!-Bühne?',o:['Links oben','In der Mitte','Links unten','Rechts oben'],a:1,e:'Der Ursprung des Koordinatensystems liegt in der Mitte der Bühne.'},
+    {q:'In welche Richtung zeigt ein Sprite nach „zeige Richtung 0“?',o:['nach rechts','nach unten','nach oben','nach links'],a:2,e:'0 = oben, 90 = rechts, 180 = unten, −90 = links.'},
+    {q:'Ein Sprite steht bei (0 | 0) mit Richtung 90 und führt „gehe 50 Schritte“ aus. Wo steht es danach?',o:['(0 | 50)','(50 | 0)','(−50 | 0)','(0 | −50)'],a:1,e:'Richtung 90 bedeutet nach rechts, also ändert sich nur die x-Koordinate.'},
+    {q:'Um wie viel Grad dreht sich das Sprite an jeder Ecke eines gleichseitigen Dreiecks?',o:['60°','90°','120°','180°'],a:2,e:'Der Außenwinkel beträgt 180° − 60° = 120°; dreimal 120° ergibt 360°.'},
+    {q:'Was bewirkt „Stift hoch“?',o:['Das Sprite bewegt sich nach oben','Das Sprite bewegt sich, ohne zu zeichnen','Die Bühne wird gelöscht','Die Linie wird dicker'],a:1,e:'Mit angehobenem Stift hinterlässt das Sprite keine Spur.'},
+  ],
+  k:[
+    {q:'Wie oft wird „gehe 10 Schritte“ ausgeführt?<br><code>wiederhole 3 mal { wiederhole 4 mal { gehe 10 Schritte } }</code>',o:['7-mal','12-mal','3-mal','4-mal'],a:1,e:'Die innere Schleife läuft bei jedem der 3 äußeren Durchläufe 4-mal: 3 · 4 = 12.'},
+    {q:'Um wie viel Grad muss sich das Sprite bei einem regelmäßigen Achteck drehen?',o:['45°','40°','60°','135°'],a:0,e:'360° : 8 = 45°.'},
+    {q:'Wann wird der sonst-Teil einer Verzweigung ausgeführt?',o:['Immer','Wenn die Bedingung wahr ist','Wenn die Bedingung falsch ist','Nie'],a:2,e:'Bei falls … sonst wird genau einer der beiden Teile ausgeführt: oben bei wahr, unten bei falsch.'},
+    {q:'Wann endet die Schleife „wiederhole bis &lt;x &gt; 10&gt;“?',o:['Nach genau 10 Durchläufen','Sobald x > 10 wahr ist','Solange x > 10 ist','Nie'],a:1,e:'Die Schleife wiederholt, bis die Bedingung wahr wird.'},
+    {q:'Was ergibt 17 mod 5?',o:['3','3,4','2','5'],a:2,e:'17 = 3 · 5 + 2. Der Rest ist 2.'},
+  ],
+  v:[
+    {q:'Welchen Wert hat x am Ende?<br><code>setze x auf 5 · ändere x um 3 · setze x auf x * 2</code>',o:['16','13','10','8'],a:0,e:'5 → 8 → 16.'},
+    {q:'Welchen Wert hat b am Ende?<br><code>setze a auf 3 · setze b auf a · setze a auf 7</code>',o:['7','3','10','a'],a:1,e:'b bekommt den damaligen Wert von a (3). Spätere Änderungen von a ändern b nicht.'},
+    {q:'Wie viele Werte kann eine (normale) Variable gleichzeitig speichern?',o:['Einen','Zwei','Beliebig viele','Keinen'],a:0,e:'Eine Variable speichert genau einen Wert. Für viele Werte gibt es Listen (Kapitel 5).'},
+    {q:'Was steht nach „frage … und warte“ in der Variablen Antwort?',o:['Die Frage','Die Eingabe des Benutzers','Immer eine Zahl','wahr oder falsch'],a:1,e:'Antwort enthält die letzte Eingabe.'},
+    {q:'Welchen Wert hat summe am Ende?<br><code>setze summe auf 0 · für i = 1 bis 4 { ändere summe um i }</code>',o:['4','5','10','24'],a:2,e:'0 + 1 + 2 + 3 + 4 = 10.'},
+  ],
+  p:[
+    {q:'Was ist ein Vorteil eigener Blöcke?',o:['Das Programm läuft schneller','Programmteile lassen sich wiederverwenden und das Programm wird übersichtlicher','Man braucht keine Schleifen mehr','Man kann keine Fehler mehr machen'],a:1,e:'Prozeduren dienen der Wiederverwendung, Übersichtlichkeit und Zerlegung in Teilprobleme.'},
+    {q:'Was ist ein Parameter?',o:['Eine Eingabe eines Blocks, die beim Aufruf mit einem Wert belegt wird','Ein Fehler im Programm','Eine Liste','Eine Endlosschleife'],a:0,e:'Parameter sind Platzhalter in der Definition, die beim Aufruf einen Wert bekommen.'},
+    {q:'Was unterscheidet eine Funktion (Reporter) von einem Befehlsblock?',o:['Sie ist immer grün','Sie berichtet einen Wert zurück','Sie hat keine Eingaben','Sie kann nicht selbst gebaut werden'],a:1,e:'Funktionen geben mit „berichte“ einen Wert zurück und werden in Eingabefeldern verwendet.'},
+    {q:'Was berichtet fakultät(4)?',o:['4','10','16','24'],a:3,e:'4! = 4 · 3 · 2 · 1 = 24.'},
+    {q:'Was versteht man unter Rekursion?',o:['Ein Block ruft sich selbst auf','Eine Schleife mit fester Anzahl','Das Löschen eines Blocks','Eine Liste von Listen'],a:0,e:'Rekursion: Ein Block ruft sich (mit einfacherem Problem) selbst auf, bis eine Abbruchbedingung erreicht ist.'},
+  ],
+  l:[
+    {q:'Welchen Index hat das erste Element einer Liste in Snap!?',o:['0','1','−1','Das hängt von der Liste ab'],a:1,e:'In Snap! beginnt die Zählung bei 1 (in vielen Textsprachen wie Python bei 0).'},
+    {q:'L = liste(4, 8, 15, 16). Was ergibt element(3, L)?',o:['8','15','16','3'],a:1,e:'Position 3 enthält 15.'},
+    {q:'L hat 4 Elemente. Nach „füge 23 zu L hinzu“ ist die Länge …',o:['4','5','23','27'],a:1,e:'Ein Element wird hinten angehängt: 4 + 1 = 5.'},
+    {q:'Was macht „für jedes element in liste“?',o:['Löscht alle Elemente','Führt die Blöcke im Mund einmal für jedes Element aus','Sortiert die Liste','Zählt die Elemente'],a:1,e:'Die Variable element nimmt nacheinander jeden Wert der Liste an.'},
+    {q:'Womit startet der Algorithmus „Maximum suchen“ sinnvollerweise?',o:['Mit dem letzten Element als bisher größtem','Mit dem ersten Element als bisher größtem','Mit 0 als bisher größtem – das klappt immer','Mit einer Zufallszahl'],a:1,e:'Startet man mit 0, scheitert der Algorithmus bei Listen nur mit negativen Zahlen. Das erste Element ist immer ein sicherer Start.'},
+  ],
+  final:[
+    {q:'Welche Kontrollstruktur verwendest du, wenn du vorher nicht weißt, wie oft etwas wiederholt werden muss?',o:['wiederhole … mal','wiederhole bis …','falls … sonst','Sequenz'],a:1,e:'wiederhole bis läuft, bis eine Bedingung erfüllt ist.'},
+    {q:'Welcher Drehwinkel ergibt einen fünfzackigen Stern?',o:['72°','108°','144°','150°'],a:2,e:'Fünfmal 144° = 720°, das Sprite dreht sich zweimal im Kreis und es entsteht ein Stern.'},
+    {q:'Was gibt dieses Programm aus?<br><code>setze z auf 0 · wiederhole 3 mal { ändere z um 2 } · sage z * z</code>',o:['6','9','36','12'],a:2,e:'z wird 6, 6 · 6 = 36.'},
+    {q:'Eine Funktion istGerade(n) soll wahr berichten, wenn n gerade ist. Welche Bedingung passt?',o:['n / 2 = 0','n mod 2 = 0','n mod 2 = 1','n > 2'],a:1,e:'Gerade Zahlen lassen bei Division durch 2 den Rest 0.'},
+    {q:'liste(5, 3, 8). Nach „ersetze Element 2 in liste durch 7“ ist die Liste …',o:['[5, 7, 8]','[5, 3, 7]','[7, 3, 8]','[5, 3, 8, 7]'],a:0,e:'Element 2 (die 3) wird durch 7 ersetzt.'},
+    {q:'Warum braucht ein rekursiver Block eine Abbruchbedingung?',o:['Damit er schneller wird','Damit er sich nicht unendlich oft selbst aufruft','Damit er Parameter bekommt','Das ist nicht nötig'],a:1,e:'Ohne Abbruchbedingung würde sich der Block endlos aufrufen.'},
+  ],
+};
+function renderQuiz(host){
+  const qs=QUIZ[host.dataset.quiz];if(!qs)return;const id=host.dataset.quiz;
+  const best=store.get('quiz:'+id,null);
+  const wrap=el('div');
+  qs.forEach((q,qi)=>{const d=el('div','qq');d.innerHTML=`<p>${qi+1}. ${q.q}</p>`;
+    q.o.forEach((o,oi)=>{const l=el('label');l.innerHTML=`<input type="radio" name="q-${id}-${qi}" value="${oi}"> ${esc(o)}`;d.appendChild(l);});
+    const ex=el('div','ex');ex.textContent='💡 '+q.e;d.appendChild(ex);wrap.appendChild(d);});
+  const bt=el('button','btn pri','Auswerten');const again=el('button','btn','Nochmal');again.style.display='none';again.style.marginLeft='6px';
+  const res=el('span','qres',best!=null?`Bisher bestes Ergebnis: ${best} von ${qs.length}`:'');
+  bt.onclick=()=>{let ok=0;$$('.qq',wrap).forEach((d,qi)=>{d.classList.add('done');const sel=$('input:checked',d);
+      $$('label',d).forEach((l,oi)=>{l.classList.remove('right','wrong');if(oi===qs[qi].a)l.classList.add('right');else if(sel&&+sel.value===oi)l.classList.add('wrong');});
+      if(sel&&+sel.value===qs[qi].a)ok++;});
+    res.textContent=`${ok} von ${qs.length} richtig ${ok===qs.length?'🎉':ok>=qs.length/2?'👍':'– schau dir die Erklärungen an!'}`;
+    const b0=store.get('quiz:'+id,0);if(ok>b0)store.set('quiz:'+id,ok);again.style.display='';};
+  again.onclick=()=>{$$('.qq',wrap).forEach(d=>{d.classList.remove('done');$$('label',d).forEach(l=>l.classList.remove('right','wrong'));$$('input',d).forEach(i=>i.checked=false);});res.textContent='';again.style.display='none';};
+  host.appendChild(wrap);host.appendChild(bt);host.appendChild(again);host.appendChild(res);
+}
+
+/* ================= Puzzle (Parsons) ================= */
+const PARSONS={
+  tee:['Wasserkocher mit Wasser füllen','Wasserkocher einschalten','Warten, bis das Wasser kocht','Teebeutel in die Tasse legen','Heißes Wasser in die Tasse gießen','Tee 3–5 Minuten ziehen lassen','Teebeutel herausnehmen'],
+  quadrat:['Wenn ⚑ angeklickt','wische','Stift runter','wiederhole 4 mal','    gehe 100 Schritte','    drehe ↻ 90 Grad','sage Fertig!'],
+  max:['Merke dir das erste Element als „bisher größtes“','Gehe die Liste Element für Element durch','Prüfe: Ist das aktuelle Element größer als das bisher größte?','Wenn ja: Merke dir das aktuelle Element als neues „bisher größtes“','Gib am Ende das bisher größte Element aus'],
+};
+function renderParsons(host){
+  const items=PARSONS[host.dataset.parsons];if(!items)return;
+  let order=shuffle(items.map((t,i)=>i));let tries=0;while(order.every((v,i)=>v===i)&&tries++<10)order=shuffle(order);
+  const ul=el('ul','parsons');let drag=null;
+  const mk=i=>{const li=el('li');li.dataset.i=i;li.draggable=true;const sp=el('span',null,items[i]);li.appendChild(sp);
+    const mv=el('span','mv');const u=el('button',null,'▲'),d=el('button',null,'▼');u.type=d.type='button';u.title='nach oben';d.title='nach unten';
+    u.onclick=()=>{if(li.previousElementSibling)ul.insertBefore(li,li.previousElementSibling);clr();};d.onclick=()=>{if(li.nextElementSibling)ul.insertBefore(li.nextElementSibling,li);clr();};
+    mv.append(u,d);li.appendChild(mv);
+    li.addEventListener('dragstart',()=>{drag=li;li.classList.add('dragging');});
+    li.addEventListener('dragend',()=>{li.classList.remove('dragging');drag=null;clr();});
+    li.addEventListener('dragover',e=>{e.preventDefault();if(!drag||drag===li)return;const r=li.getBoundingClientRect();ul.insertBefore(drag,e.clientY>r.top+r.height/2?li.nextSibling:li);});
+    return li;};
+  const clr=()=>{$$('li',ul).forEach(l=>l.classList.remove('right','wrong'));fb.textContent='';};
+  order.forEach(i=>ul.appendChild(mk(i)));
+  const bt=el('button','btn pri','Überprüfen');const fb=el('span','feedback');
+  bt.onclick=()=>{let ok=0;$$('li',ul).forEach((l,pos)=>{const r=+l.dataset.i===pos;l.classList.add(r?'right':'wrong');if(r)ok++;});
+    fb.textContent=ok===items.length?'🎉 Perfekt – alles in der richtigen Reihenfolge!':`${ok} von ${items.length} Zeilen stehen richtig.`;};
+  host.append(ul,bt,fb);
+}
+
+/* ================= Lückentexte ================= */
+function renderCloze(host){
+  host.innerHTML=host.innerHTML.replace(/\[\[(.+?)\]\]/g,(m,a)=>`<input data-a="${esc(a)}" aria-label="Lücke" autocomplete="off" spellcheck="false">`);
+  const ins=$$('input',host);ins.forEach(i=>{const len=Math.max(...i.dataset.a.split('|').map(s=>s.length));i.style.width=Math.max(4,len+2)+'ch';i.oninput=()=>i.classList.remove('right','wrong');});
+  const bar=el('div');bar.style.marginTop='10px';const bt=el('button','btn pri','Prüfen'),sol=el('button','btn','Lösungen zeigen'),fb=el('span','feedback');sol.style.marginLeft='6px';
+  const norm=s=>s.trim().toLowerCase().replace(',','.').replace(/\s+/g,' ');
+  bt.onclick=()=>{let ok=0;ins.forEach(i=>{const r=i.dataset.a.split('|').some(a=>norm(a)===norm(i.value));i.classList.toggle('right',r);i.classList.toggle('wrong',!r);if(r)ok++;});
+    fb.textContent=ok===ins.length?'🎉 Alles richtig!':`${ok} von ${ins.length} richtig.`;};
+  sol.onclick=()=>{ins.forEach(i=>{i.value=i.dataset.a.split('|')[0];i.classList.remove('wrong');i.classList.add('right');});fb.textContent='';};
+  bar.append(bt,sol,fb);host.after(bar);
+}
+
+/* ================= Widgets ================= */
+function initUiMock(){
+  const m=$('#uimock'),info=$('#uiminfo');if(!m)return;
+  $$('div',m).forEach(d=>d.onclick=()=>{$$('div',m).forEach(x=>x.classList.remove('on'));d.classList.add('on');info.innerHTML=d.dataset.i;});
+}
+function initNeck(){
+  const cv=$('#neckcv');if(!cv)return;const g=cv.getContext('2d'),r=$('#neckr'),lab=$('#neckn'),code=$('#neckcode');
+  const draw=()=>{const n=+r.value;lab.textContent=n;const s=Math.min(130,820/n/1.0);
+    g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,520,360);
+    // Startpunkt so wählen, dass das Vieleck zentriert ist
+    const R=s/(2*Math.sin(Math.PI/n));const cx=260,cy=180;
+    let x=cx-s/2,y=cy+R*Math.cos(Math.PI/n),dir=0;
+    g.lineWidth=3;g.strokeStyle='#4a6cd4';g.beginPath();g.moveTo(x,y);
+    for(let i=0;i<n;i++){x+=Math.cos(dir)*s;y-=Math.sin(dir)*s;g.lineTo(x,y);dir+=2*Math.PI/n;}
+    g.stroke();
+    // Winkel markieren
+    g.fillStyle='#e04848';g.font='bold 14px system-ui';g.fillText(`${Math.round(360/n*100)/100}°`,cx+s/2+8,cy+R*Math.cos(Math.PI/n)-6);
+    code.innerHTML='';const box=el('div','blocks');const prog=clone([R4(n,Math.round(s))]);
+    renderProgram(box,prog,{ws:null,procs:[]},{hat:false});code.appendChild(box);
+    const p=el('p');p.innerHTML=`Drehwinkel: 360° : ${n} = <b>${Math.round(360/n*100)/100}°</b><br>Gesamtdrehung: ${n} · ${Math.round(360/n*100)/100}° = 360°`;code.appendChild(p);};
+  const R4=(n,s)=>({t:'repeat',a:[String(n)],body:[{t:'move',a:[String(s)]},{t:'turnR',a:[`360 / ${n}`]}]});
+  r.oninput=draw;draw();
+}
+function initMachine(){
+  const sel=$('#mfn');if(!sel)return;
+  const F=[['verdopple','x → 2 · x',x=>2*x],['quadratzahl','x → x · x',x=>x*x],['nachfolger','x → x + 1',x=>x+1],['betrag','x → |x|',x=>Math.abs(x)],['istGerade','x → wahr/falsch',x=>(((x%2)+2)%2===0)?'wahr':'falsch'],['❓ Geheimfunktion','?',x=>3*x-1]];
+  F.forEach((f,i)=>{const o=el('option',null,f[0]);o.value=i;sel.appendChild(o);});
+  const go=()=>{const x=parseFloat($('#mx').value);const f=F[+sel.value];const box=$('#mbox');box.classList.remove('spin');void box.offsetWidth;box.classList.add('spin');
+    $('#mout').textContent=isNaN(x)?'?':fmt(f[2](x));$('#mguess').style.display=+sel.value===F.length-1?'':'none';};
+  $('#mgo').onclick=go;sel.onchange=()=>{$('#mout').textContent='?';$('#mguess').style.display=+sel.value===F.length-1?'':'none';};
+  $('#mgc').onclick=()=>{const s=$('#mg').value;let ok=true;
+    try{const ast=parseExpr(s);for(const x of [-3,0,1,2,5,10]){const v=ev(ast,{get:n=>{if(n==='x')return x;throw new MissingVar(n);},call:(n,a)=>{const f=BUILTIN[n.toLowerCase()];if(!f)throw new Error('?');return f(...a);}});if(Math.abs(num(v)-(3*x-1))>1e-9){ok=false;break;}}}catch(e){ok=false;}
+    $('#mgr').textContent=ok?'🎉 Richtig! f(x) = 3 · x − 1':'❌ Noch nicht – probiere weitere Eingaben aus.';};
+}
+function initListLab(){
+  if(!$('#lpview'))return;let L=['Apfel','Brot','Milch'];
+  const view=()=>{$('#lpview').innerHTML=`<div class="watch lw lwbig"><span>liste</span><table>${L.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x)}</td></tr>`).join('')||'<tr><td colspan=2 style="background:#fff;color:#8a8fa3">leer</td></tr>'}</table><small>Länge: ${L.length}</small></div>`;};
+  const out=(blk,res)=>{$('#lpout').innerHTML=`<b>${esc(blk)}</b>${res!=null?'<br>→ '+esc(res):''}`;view();};
+  const pos=()=>parseInt($('#lpi').value,10);
+  $('#lpadd').onclick=()=>{const v=$('#lpv').value.trim();if(!v)return;L.push(v);out(`füge [${v}] zu [liste] hinzu`);};
+  $('#lpget').onclick=()=>{const i=pos();out(`element(${i}, liste)`,i>=1&&i<=L.length?L[i-1]:'Fehler: Diese Position gibt es nicht!');};
+  $('#lpdel').onclick=()=>{const i=pos();if(i>=1&&i<=L.length){L.splice(i-1,1);out(`lösche [${i}] aus [liste]`);}else out(`lösche [${i}] aus [liste]`,'Fehler: Diese Position gibt es nicht!');};
+  $('#lprep').onclick=()=>{const i=pos(),v=$('#lpv').value.trim();if(i>=1&&i<=L.length){L[i-1]=v;out(`ersetze Element [${i}] in [liste] durch [${v}]`);}else out(`ersetze Element [${i}] …`,'Fehler: Diese Position gibt es nicht!');};
+  $('#lplen').onclick=()=>out('länge(liste)',L.length);
+  $('#lpclr').onclick=()=>{L=[];out('setze [liste] auf leere Liste');};
+  view();
+}
+function initSnapFrames(){
+  $$('[data-snapframe]').forEach(bt=>bt.onclick=()=>{const h=document.getElementById(bt.dataset.snapframe);
+    if(h.firstChild){h.innerHTML='';bt.textContent='Snap! hier einblenden';return;}
+    const f=el('iframe','snapframe');f.src='https://snap.berkeley.edu/snap/snap.html';f.title='Snap!';f.setAttribute('allow','fullscreen');h.appendChild(f);bt.textContent='Snap! ausblenden';});
+}
+
+/* ================= Navigation & Fortschritt ================= */
+const SECTIONS=$$('section.chap');
+function done(){return store.get('done',{});}
+function updateNav(){
+  const d=done();const cur=(SECTIONS.find(s=>s.classList.contains('on'))||{}).id;
+  const nav=$('#nav');nav.innerHTML='';
+  SECTIONS.forEach(s=>{const bt=el('button');bt.type='button';bt.textContent=s.dataset.nav;if(d[s.id]){const ok=el('span','ok','✓');bt.appendChild(ok);}
+    if(s.id===cur)bt.classList.add('on');bt.onclick=()=>{location.hash=s.id;};nav.appendChild(bt);});
+  const total=SECTIONS.length-1,n=SECTIONS.filter(s=>s.id!=='start'&&d[s.id]).length;$('#progbar').style.width=(n/total*100)+'%';
+  $$('.donebtn').forEach(b=>{const on=!!d[b.dataset.id];b.classList.toggle('is',on);b.textContent=on?'✓ Kapitel erledigt':'Kapitel als erledigt markieren';});
+}
+function show(id){
+  if(!SECTIONS.some(s=>s.id===id))id='start';
+  SECTIONS.forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0);store.set('last',id);updateNav();
+}
+function buildChapterUI(){
+  const cards=$('#chapcards');
+  SECTIONS.forEach((s,i)=>{
+    if(s.id!=='start'){const c=el('div','card');c.innerHTML=`<span class="num">Kapitel ${i}</span><b>${esc(s.dataset.nav.replace(/^\d+\s*/,''))}</b><span>${esc(s.dataset.sub||'')}</span>`;c.onclick=()=>{location.hash=s.id;};cards.appendChild(c);}
+    const f=el('div','chapfoot');
+    const prev=SECTIONS[i-1],next=SECTIONS[i+1];
+    const pb=el('button','btn',prev?'← '+prev.dataset.nav:'');pb.style.visibility=prev?'':'hidden';if(prev)pb.onclick=()=>{location.hash=prev.id;};
+    const mid=el('div');if(s.id!=='start'){const db=el('button','btn donebtn');db.dataset.id=s.id;db.onclick=()=>{const d=done();d[s.id]=!d[s.id];store.set('done',d);updateNav();};mid.appendChild(db);}
+    const nb=el('button','btn pri',next?next.dataset.nav+' →':'');nb.style.visibility=next?'':'hidden';if(next)nb.onclick=()=>{if(s.id!=='start'){const d=done();d[s.id]=true;store.set('done',d);}location.hash=next.id;};
+    f.append(pb,mid,nb);s.appendChild(f);
+  });
+}
+
+/* ================= Start ================= */
+function init(){
+  buildChapterUI();
+  renderStatics();
+  $$('.ws[data-ws]').forEach(h=>new Workspace(h));
+  $$('.quiz-host').forEach(renderQuiz);
+  $$('.parsons-host').forEach(renderParsons);
+  $$('.cloze').forEach(renderCloze);
+  initUiMock();initNeck();initMachine();initListLab();initSnapFrames();
+  window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+  show(location.hash.slice(1)||store.get('last','start'));
+}
+init();
+</script>
+</body>
+</html>
